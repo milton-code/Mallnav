@@ -5,7 +5,7 @@
     android:id="@+id/cardVw"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".RegistroFragment">
+    tools:context=".ui.fragments.RegistroFragment">
 
     <LinearLayout
         android:layout_width="350dp"
@@ -17,7 +17,8 @@
             android:id="@+id/imageRegistro"
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:src="@drawable/registro" />
+            android:src="@drawable/registro"
+            app:tint="#656565"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,7 +32,7 @@
                 android:layout_marginEnd="7.5dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Nombre"
+                android:hint="@string/nombre"
                 android:inputType="text" />
 
             <EditText
@@ -41,7 +42,7 @@
                 android:layout_marginStart="7.5dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Apellido"
+                android:hint="@string/apellido"
                 android:inputType="text" />
         </LinearLayout>
 
@@ -51,7 +52,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="Ingrese su e-mail"
+            android:hint="@string/ingrese_su_e_mail"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -60,7 +61,7 @@
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="Ingrese un password"
+            android:hint="@string/ingrese_un_password"
             android:inputType="textPassword" />
 
         <Button
@@ -69,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:text="Registrar"
+            android:text="@string/registrar"
             android:textSize="18sp" />
 
     </LinearLayout>
