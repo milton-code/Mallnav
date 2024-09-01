@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_navigation">
+
+    <fragment
+        android:id="@+id/navigation_navigation"
+        android:name="com.proyecto.mallnav.ui.fragments.NavigationFragment"
+        android:label="@string/menu_item_navigation"
+        tools:layout="@layout/fragment_navigation">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.proyecto.mallnav.ui.fragments.ProfileFragment"
+        android:label="@string/menu_item_profile"
+        tools:layout="@layout/fragment_profile">
+    </fragment>
+
+</navigation>

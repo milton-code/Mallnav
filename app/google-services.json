@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "44377518365",
+    "project_id": "mallnav-e74db",
+    "storage_bucket": "mallnav-e74db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44377518365:android:bf66581e72370ee0f771f4",
+        "android_client_info": {
+          "package_name": "com.proyecto.mallnav"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLworFInHY34S_n4SSAcyKbkiiVW0-7Vw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Mallnav</string>
+    <!--activity_login-->
+    <string name="registrar_usuario">Registrar usuario</string>
+    <string name="iniciar_sesion">Iniciar sesión</string>
+    <string name="ingrese_su_e_mail">Ingrese su e-mail</string>
+    <string name="ingrese_su_password">Ingrese su password</string>
+    <!--fragment_registro-->
+    <string name="apellido">Ingrese su apellido</string>
+    <string name="nombre">Ingrese su nombre</string>
+    <string name="registrar">Registrar</string>
+    <string name="ingrese_un_password">Ingrese un password</string>
+    <!--bottom navigation-->
+    <string name="menu_item_navigation">Navegación</string>
+    <string name="menu_item_profile">Perfil</string>
+    <!--    miscellaneous-->
+    <string name="search_title">Buscar</string>
+    <string name="state_on">on</string>
+    <string name="state_off">off</string>
+    <!--errores-->
+    <string name="err_navigation_state_bluetooth">¡Su Bluetooth está deshabilitado! Por favor enciéndalo para empezar la navegación</string>
+    <string name="err_navigation_state_gps">¡Su GPS está deshabilitado! Por favor enciéndalo para empezar la navegación</string>
+    <string name="err_navigation_state_gps_bluetooth">¡Su GPS y Bluetooth están deshabilitados! Por favor enciéndalos para empezar la navegación</string>
+
+</resources>
