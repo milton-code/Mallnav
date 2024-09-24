@@ -13,6 +13,8 @@ import static com.proyecto.mallnav.utils.Constants.VENUE_FILTER_ON;
 import static com.proyecto.mallnav.utils.Constants.TAG;
 import static com.proyecto.mallnav.utils.Constants.VENUE_SELECTED;*/
 
+import static com.proyecto.mallnav.utils.Constants.VENUE_SELECTED;
+
 import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -48,9 +50,15 @@ import com.google.android.material.textview.MaterialTextView;
 
 //import com.proyecto.mallnav.service.NavigationService;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.proyecto.mallnav.R;
 
+import com.proyecto.mallnav.adapters.venues.VenueListAdapter;
+import com.proyecto.mallnav.models.Venue;
 import com.proyecto.mallnav.ui.activities.LoginActivity;
+import com.proyecto.mallnav.ui.activities.MainActivity;
 /*import com.proyecto.mallnav.ui.custom.lists.BottomSheetListView;
 import com.proyecto.mallnav.ui.dialogs.sheets.BottomSheetVenue;
 import com.proyecto.mallnav.utils.ColorUtils;
@@ -59,6 +67,8 @@ import com.proyecto.mallnav.utils.KeyboardController;
 import com.proyecto.mallnav.utils.NavigineSdkManager;
 import com.proyecto.mallnav.utils.VenueIconsListProvider;
 import com.proyecto.mallnav.viewmodel.NavigationViewModel;*/
+import com.proyecto.mallnav.utils.KeyboardController;
+import com.proyecto.mallnav.utils.VenueProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,14 +76,10 @@ import java.util.List;
 import java.util.Map;
 
 public class NavigationFragment extends BaseFragment {
-    private final int mLocationId = 1563;
-    private final int mSublocationId = 2091;
     private float mZoomCameraDefault = 0f;
-
     private Window window = null;
     private MaterialButton mSearchBtnClose = null;
     private SearchView mSearchField = null;
-
     private BottomSheetBehavior mMakeRouteBehavior = null;
     private BottomSheetBehavior mCancelRouteBehaviour = null;
 
@@ -81,6 +87,7 @@ public class NavigationFragment extends BaseFragment {
     private ConstraintLayout mMakeRouteSheet = null;
     private LinearLayout mSearchLayout = null;
     private FrameLayout mTransparentBackground = null;
+    private VenueListAdapter mVenueListAdapter = null;
     private FrameLayout mVenueListLayout = null;
     private FrameLayout mVenueIconsLayout = null;
     private FrameLayout mAdjustModeButton = null;
@@ -95,10 +102,6 @@ public class NavigationFragment extends BaseFragment {
     private MaterialButton mRouteSheetCancelButton    = null;
 
     private MaterialDividerItemDecoration mItemDivider = null;
-
-
-
-
 
     private StateReceiver mStateReceiver = null;
     //private PositionReceiver mPositionReceiver = null;
@@ -116,13 +119,16 @@ public class NavigationFragment extends BaseFragment {
     private boolean mSetupPosition = true;
     private boolean mOrientationPointState  = false;
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        VenueProvider.initVenues(getContext());
         initViewModels();
         //initListeners();
         initBroadcastReceiver();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -136,6 +142,7 @@ public class NavigationFragment extends BaseFragment {
         setViewsListeners();
         setObservers();
         updateWarningMessageState();
+        mVenueListAdapter.submit(VenueProvider.venueList);
 
         return view;
     }
@@ -210,7 +217,7 @@ public class NavigationFragment extends BaseFragment {
         //mPositionReceiverFilter = new IntentFilter();
 
         //mStateReceiverFilter.addAction(LOCATION_CHANGED);
-        ////////////mStateReceiverFilter.addAction(VENUE_SELECTED);
+        mStateReceiverFilter.addAction(VENUE_SELECTED);
         //mStateReceiverFilter.addAction(VENUE_FILTER_ON);
         //mStateReceiverFilter.addAction(VENUE_FILTER_OFF);
 
@@ -473,12 +480,12 @@ public class NavigationFragment extends BaseFragment {
     }
 
     private void initAdapters(){
-        //mVenueListAdapter = new VenueListAdapter();
+        mVenueListAdapter = new VenueListAdapter();
         //mVenuesIconsListAdapter = new VenuesIconsListAdapter();
     }
 
     private void setAdapters(){
-        //mVenueListView.setAdapter(mVenueListAdapter);
+        mVenueListView.setAdapter(mVenueListAdapter);
         //mVenueIconsListView.setAdapter(mVenuesIconsListAdapter);
     }
 
@@ -642,14 +649,13 @@ public class NavigationFragment extends BaseFragment {
 
     private void onHandleSearchQueryChange(String query) {
         if (query.isEmpty()) {
-            //hideSearchButton();
+
             showSearchCLoseBtn();
             hideVenueListLayout();
             //showVenueIconsLayout();
             //populateVenueIconsLayout();
         } else {
             hideSearchCLoseBtn();
-            //showSearchButton();
             //hideVenueIconsLayout();
             showVenueListLayout();
         }
@@ -657,7 +663,7 @@ public class NavigationFragment extends BaseFragment {
     }
 
     private void filterVenueListByQuery(String query) {
-        //mVenueListAdapter.filter(query);
+        mVenueListAdapter.filter(query);
     }
 
     private void hideVenueLayouts() {
@@ -670,7 +676,7 @@ public class NavigationFragment extends BaseFragment {
         if (hasFocus) {
             showTransparentLayout();
             changeSearchLayoutBackground(Color.WHITE);
-            //changeSearchBoxStroke(ColorUtils.COLOR_PRIMARY);
+            changeSearchBoxStroke(R.color.colorPrimary);
             showSearchCLoseBtn();
             if (isQueryEmpty) {
                 hideVenueListLayout();
@@ -681,13 +687,13 @@ public class NavigationFragment extends BaseFragment {
                 showVenueListLayout();
             }
         } else {
-            /*changeSearchBoxStroke(ColorUtils.COLOR_SECONDARY);
-            KeyboardController.hideSoftKeyboard(requireActivity());*/
+            changeSearchBoxStroke(R.color.colorSecondary);
+            KeyboardController.hideSoftKeyboard(requireActivity());
         }
     }
 
     private void changeSearchBoxStroke(int color) {
-        //((GradientDrawable) mSearchField.getBackground()).setStroke(DimensionUtils.STROKE_WIDTH, color);
+        ((GradientDrawable) mSearchField.getBackground()).setStroke((int) getContext().getResources().getDimension(R.dimen.search_stroke_width), color);
     }
 
     /*private void showVenueIconsLayout() {
