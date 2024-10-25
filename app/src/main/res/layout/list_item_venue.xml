@@ -18,12 +18,4 @@
         android:layout_weight=".7"
         tools:text="Pet Shop 1" />
 
-    <!--<TextView
-        android:id="@+id/li_venue_sublocation"
-        style="@style/Theme.Mallnav.List.Item.TextView.Venue.Sublocation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight=".3"
-        tools:text="Name of floor" />-->
-
 </LinearLayout>

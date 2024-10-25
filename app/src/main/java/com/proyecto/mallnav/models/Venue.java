@@ -9,6 +9,8 @@ public class Venue {
     int categoria_id = -1;
     String categoria = null;
     VenueIconObj venueIcon = null;
+    int sector_id = -1;
+    Sector sector = null;
 
     public Venue(){}
 
@@ -58,5 +60,21 @@ public class Venue {
 
     public void setVenueIcon(VenueIconObj venueIcon) {
         this.venueIcon = venueIcon;
+    }
+
+    public int getSector_id() {
+        return sector_id;
+    }
+
+    public Sector getSector() {
+        return sector;
+    }
+
+    public void setSector_id(int sector_id) {
+        this.sector_id = sector_id;
+    }
+
+    public void setSector(Sector sector) {
+        this.sector = sector;
     }
 }

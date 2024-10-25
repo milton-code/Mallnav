@@ -17,75 +17,93 @@
                     android:clickable="true"
                     android:focusable="true">
 
+                    <FrameLayout
+                        android:id="@+id/navigation_map_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
-                        <FrameLayout
-                            android:id="@+id/navigation__search_transparent_bg"
+                        <com.github.chrisbanes.photoview.PhotoView
+                            android:id="@+id/navigation__map_view"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:elevation="1dp"
-                            android:gravity="top">
+                            android:scaleType="centerInside"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/navigation__search_transparent_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:elevation="1dp"
+                        android:gravity="top"
+                        android:visibility="visible">
 
 
-                                <LinearLayout
-                                    android:id="@+id/navigation_search"
-                                    android:layout_width="match_parent"
+                        <LinearLayout
+                            android:id="@+id/navigation_search"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:animateLayoutChanges="true"
+                            android:background="@drawable/bg_rounded_bottom_transparent"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="vertical"
+                            android:paddingTop="25dp"
+                            android:paddingBottom="15dp"
+                            android:visibility="visible">
+
+                            <!--Search box-->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/navigation__search_panel"
+                                android:layout_width="match_parent"
+                                android:layout_height="37dp"
+                                android:animateLayoutChanges="true"
+                                android:paddingHorizontal="16dp">
+
+                                <androidx.appcompat.widget.SearchView
+                                    android:id="@+id/navigation__search_field"
+                                    style="@style/Theme.Mallnav.Search"
+                                    android:layout_marginEnd="8dp"
+                                    android:paddingStart="12dp"
+                                    app:closeIcon="@null"
+                                    app:layout_constraintEnd_toStartOf="@id/navigation__search_btn_container"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <FrameLayout
+                                    android:id="@+id/navigation__search_btn_container"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:animateLayoutChanges="true"
-                                    android:background="@drawable/bg_rounded_bottom_transparent"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:orientation="vertical"
-                                    android:paddingTop="25dp"
-                                    android:paddingBottom="15dp">
+                                    app:layout_constraintBottom_toBottomOf="@id/navigation__search_field"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@id/navigation__search_field">
 
-                                        <!--Search box-->
-                                        <androidx.constraintlayout.widget.ConstraintLayout
-                                            android:id="@+id/navigation__search_panel"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="37dp"
-                                            android:animateLayoutChanges="true"
-                                            android:paddingHorizontal="16dp">
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/navigation__search_btn_close"
+                                        style="@style/Theme.Mallnav.Button.Close"
+                                        android:layout_gravity="center"
+                                        android:visibility="gone" />
 
-                                                <androidx.appcompat.widget.SearchView
-                                                    android:id="@+id/navigation__search_field"
-                                                    style="@style/Theme.Mallnav.Search"
-                                                    android:layout_marginEnd="8dp"
-                                                    android:paddingStart="12dp"
-                                                    app:closeIcon="@null"
-                                                    app:layout_constraintEnd_toStartOf="@id/navigation__search_btn_container"
-                                                    app:layout_constraintStart_toStartOf="parent"
-                                                    app:layout_constraintTop_toTopOf="parent" />
+                                </FrameLayout>
 
-                                                <FrameLayout
-                                                    android:id="@+id/navigation__search_btn_container"
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    app:layout_constraintBottom_toBottomOf="@id/navigation__search_field"
-                                                    app:layout_constraintEnd_toEndOf="parent"
-                                                    app:layout_constraintTop_toTopOf="@id/navigation__search_field">
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                                                        <com.google.android.material.button.MaterialButton
-                                                            android:id="@+id/navigation__search_btn_close"
-                                                            style="@style/Theme.Mallnav.Button.Close"
-                                                            android:layout_gravity="center"
-                                                            android:visibility="gone" />
+                            <include
+                                android:id="@+id/navigation__venue_listview"
+                                layout="@layout/venue_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:visibility="visible" />
 
-                                                </FrameLayout>
-
-                                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                                        <include
-                                            android:id="@+id/navigation__venue_listview"
-                                            layout="@layout/venue_list"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="16dp"
-                                            android:visibility="visible" />
-
-                                </LinearLayout>
+                        </LinearLayout>
 
 
-                        </FrameLayout>
+                    </FrameLayout>
 
                         <include
                             android:id="@+id/navigation__warning"

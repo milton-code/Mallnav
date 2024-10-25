@@ -13,6 +13,8 @@
     <!--bottom navigation-->
     <string name="menu_item_navigation">Navegación</string>
     <string name="menu_item_profile">Perfil</string>
+    <!--navigation screen-->
+    <string name="navigation_venue_route_btn_title">Ruta</string>
     <!--    miscellaneous-->
     <string name="search_title">Buscar</string>
     <string name="state_on">on</string>

@@ -54,4 +54,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    //photoview
+    implementation ("com.github.chrisbanes:PhotoView:2.3.0")
+    //androidSVG
+    implementation ("com.caverock:androidsvg-aar:1.4")
 }
