@@ -5,27 +5,32 @@ public class Sector {
     private String nombre = null;
     private int pointX = -1;
     private int  pointY = -1;
+    private String nodoId = null;
 
-    public Sector(int id, String nombre, int pointX, int pointY) {
+    public Sector(int id, String nombre, int pointX, int pointY, String nodoId) {
         this.id = id;
         this.nombre = nombre;
         this.pointX = pointX;
         this.pointY = pointY;
+        this.nodoId = nodoId;
     }
 
     public int getId() {
         return id;
     }
-
     public String getNombre() {
         return nombre;
     }
-
     public int getPointX() {
         return pointX;
     }
-
     public int getPointY() {
         return pointY;
+    }
+    public String getNodoId() {
+        return nodoId;
+    }
+    public void setNodoId(String nodoId) {
+        this.nodoId = nodoId;
     }
 }

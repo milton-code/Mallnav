@@ -14,14 +14,16 @@
     <string name="menu_item_navigation">Navegación</string>
     <string name="menu_item_profile">Perfil</string>
     <!--navigation screen-->
-    <string name="navigation_venue_route_btn_title">Ruta</string>
+    <string name="navigation_venue_route_btn_title">Trazar ruta</string>
     <!--    miscellaneous-->
     <string name="search_title">Buscar</string>
     <string name="state_on">on</string>
     <string name="state_off">off</string>
     <!--errores-->
+    <string name="err_navigation_state_wifi">¡Su Wi-Fi está deshabilitado! Por favor enciéndalo para empezar la navegación</string>
     <string name="err_navigation_state_bluetooth">¡Su Bluetooth está deshabilitado! Por favor enciéndalo para empezar la navegación</string>
     <string name="err_navigation_state_gps">¡Su GPS está deshabilitado! Por favor enciéndalo para empezar la navegación</string>
     <string name="err_navigation_state_gps_bluetooth">¡Su GPS y Bluetooth están deshabilitados! Por favor enciéndalos para empezar la navegación</string>
+    <string name="err_navigation_state_gps_wifi">¡Su GPS y wifi están deshabilitados! Por favor enciéndalos para empezar la navegación</string>
 
 </resources>

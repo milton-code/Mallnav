@@ -50,6 +50,8 @@ public class Constants {
     public static final String KEY_VENUE_POINT       = "venue_point";
     public static final String KEY_VENUE_CATEGORY    = "venue_category";
     public static final String KEY_VENUE_NAME    = "name";
+    public static final String KEY_GEOLOCALIZAR    = "geolocalizar";
+    public static final String KEY_FINGERPRINT    = "fingerprint";
 
 
     // debug mode

@@ -55,11 +55,12 @@ public class BottomSheetVenue extends BottomSheetDialogFragment {
         mVenueCategory.setText(mCategory);
         mRouteButton.setVisibility(VISIBILITY);
         mVenueIcon.setImageResource(mIcon);
-        //mRouteButton.setOnClickListener(onClickListener);
+        mRouteButton.setOnClickListener(onClickListener);
     }
 
     private void setViewsListeners() {
         mCloseButton.setOnClickListener(v -> dismiss());
+
     }
 
     public void setSheetTitle(String title) {
@@ -72,10 +73,11 @@ public class BottomSheetVenue extends BottomSheetDialogFragment {
         mIcon = venuIcon;
     }
 
-    /*public void setRouteButtonClick(View.OnClickListener listener) {
+    public void setRouteButtonClick(View.OnClickListener listener) {
         onClickListener = listener;
-    }*/
+    }
     public void setRouteButtonVisibility(int visibility) {
         VISIBILITY = visibility;
     }
+
 }

@@ -20,7 +20,6 @@ public class VenueListAdapter extends VenuesListAdapterBase<VenueViewHolder> {
     private List<Venue> rawList     = new ArrayList<>();
     private List<Venue> currentList = new ArrayList<>();
 
-    //private Location mLocation = null;
 
     @NonNull
     @Override

@@ -58,4 +58,7 @@ dependencies {
     implementation ("com.github.chrisbanes:PhotoView:2.3.0")
     //androidSVG
     implementation ("com.caverock:androidsvg-aar:1.4")
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation("com.google.code.gson:gson:2.11.0")
+
 }

@@ -1,14 +1,14 @@
 package com.proyecto.mallnav.ui.fragments;
 
-//import static com.proyecto.mallnav.utils.Constants.LOCATION_CHANGED;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothManager;
+import static android.net.wifi.WifiManager.WIFI_STATE_CHANGED_ACTION;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -16,15 +16,15 @@ import androidx.fragment.app.Fragment;
 
 import com.proyecto.mallnav.R;
 
+import java.util.Objects;
+
 
 public abstract class BaseFragment extends Fragment {
-
     private LocationManager locationManager  = null;
-    private BluetoothManager bluetoothManager = null;
-    private BluetoothAdapter bluetoothAdapter = null;
+    private WifiManager wifiManager = null;
     private StateReceiver receiver = null;
     private IntentFilter  filter   = null;
-    protected String bluetoothState   = null;
+    protected String wifiState = null;
     protected String geoLocationState = null;
 
 
@@ -48,8 +48,8 @@ public abstract class BaseFragment extends Fragment {
     public void onResume() {
         super.onResume();
         registerReceiver();
+        updateWifiState();
         updateGeolocationState();
-        updateBluetoothState();
     }
 
     @Override
@@ -64,35 +64,31 @@ public abstract class BaseFragment extends Fragment {
 
     protected void updateWarningMessageState() { }
 
+    protected void onWifiStateChanged() {
+        updateWifiState();
+        updateWarningMessageState();
+    }
     protected void onGpsStateChanged() {
         updateGeolocationState();
         updateWarningMessageState();
     }
-
-    protected void onBluetoothStateChanged() {
-        updateBluetoothState();
-        updateWarningMessageState();
-    }
-
     private void updateGeolocationState() {
         geoLocationState = isGpsEnabled() ? getString(R.string.state_on) :  getString(R.string.state_off);
     }
-
-    private void updateBluetoothState() {
-        bluetoothState = isBluetoothEnabled() ? getString(R.string.state_on) : getString(R.string.state_off);
+    private void updateWifiState() {
+        wifiState = isWifiEnabled() ? getString(R.string.state_on) :  getString(R.string.state_off);
     }
+
 
     private void initSystemServices() {
         locationManager  = (LocationManager)  requireActivity().getSystemService(Context.LOCATION_SERVICE);
-        bluetoothManager = (BluetoothManager) requireActivity().getSystemService(Context.BLUETOOTH_SERVICE);
-        bluetoothAdapter = bluetoothManager.getAdapter();
+        wifiManager = (WifiManager) requireActivity().getSystemService(Context.WIFI_SERVICE);
     }
 
     private void initBroadcastReceiver() {
         receiver = new StateReceiver();
-        filter   = new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION);
-        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
-        //filter.addAction(LOCATION_CHANGED);
+        filter   = new IntentFilter(WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
     }
 
     private void registerReceiver() {
@@ -103,6 +99,14 @@ public abstract class BaseFragment extends Fragment {
         requireActivity().unregisterReceiver(receiver);
     }
 
+
+    protected boolean isWifiEnabled() {
+        if (wifiManager != null) {
+            return  wifiManager.isWifiEnabled();
+        }
+        else
+            return false;
+    }
     protected boolean isGpsEnabled() {
         if (locationManager != null) {
             boolean isGpsEnabled     = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -113,25 +117,15 @@ public abstract class BaseFragment extends Fragment {
             return false;
     }
 
-    protected boolean isBluetoothEnabled() {
-        return bluetoothAdapter != null && bluetoothAdapter.isEnabled();
-    }
-
-
-    /*protected void openLocationsScreen() {
-        mNavigationView.setSelectedItemId(R.id.navigation_locations);
-    }*/
-
     private class StateReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
+            switch (Objects.requireNonNull(intent.getAction())) {
                 case LocationManager.PROVIDERS_CHANGED_ACTION:
                     onGpsStateChanged();
                     break;
-                case BluetoothAdapter.ACTION_STATE_CHANGED:
-                    onBluetoothStateChanged();
+                case WIFI_STATE_CHANGED_ACTION:
+                    onWifiStateChanged();
                     break;
             }
         }

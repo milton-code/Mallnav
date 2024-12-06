@@ -1,0 +1,3 @@
+LogMedicionesUsadas
+04/12/24
+mediciones.json -> Dos tercios de 12 capturas (cada 5 segundos) y tres quintos de los fingerprints parciales

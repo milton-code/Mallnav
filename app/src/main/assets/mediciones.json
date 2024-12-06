@@ -1,0 +1,184 @@
+[
+  {
+    "cuadriculaId": 1,
+    "verticeX": 400.802,
+    "verticeY": 98.173,
+    "ancho": 21.0,
+    "alto": 21.0,
+    "nodo": {
+      "id": "A",
+      "nodoX": 413.0,
+      "nodoY": 108.0,
+      "vecinos": [
+        "C",
+        "B"
+      ]
+    },
+    "listaRefinada": [
+      {
+        "bssid": "44:22:7c:5d:36:dc",
+        "ssid": "NETLIFE-gyeaabatistab1",
+        "rssi": -85.11026936026936
+      },
+      {
+        "bssid": "58:25:75:16:c3:cc",
+        "ssid": "CENTI-GARZOTA",
+        "rssi": -68.2
+      },
+      {
+        "bssid": "c0:25:67:58:17:ec",
+        "ssid": "Nexxt_5817EC-2.4G",
+        "rssi": -90.58585858585859
+      },
+      {
+        "bssid": "a4:15:88:d9:7c:e0",
+        "ssid": "ARRIS-7CE2",
+        "rssi": -78.28333333333333
+      },
+      {
+        "bssid": "90:9a:4a:05:86:d4",
+        "ssid": "MiNetwork_2.4G",
+        "rssi": -54.416666666666664
+      },
+      {
+        "bssid": "2c:b0:5d:82:97:d2",
+        "ssid": "Claro_BATISTA2",
+        "rssi": -81.3037037037037
+      },
+      {
+        "bssid": "4a:12:58:24:78:80",
+        "ssid": "CENTI-GARZOTA",
+        "rssi": -83.01212121212122
+      }
+    ]
+  },
+  {
+    "cuadriculaId": 2,
+    "verticeX": 421.802,
+    "verticeY": 98.173,
+    "ancho": 21.0,
+    "alto": 21.0,
+    "nodo": {
+      "id": "B",
+      "nodoX": 432.653,
+      "nodoY": 104.592,
+      "vecinos": [
+        "A",
+        "D"
+      ]
+    },
+    "listaRefinada": [
+      {
+        "bssid": "58:25:75:16:c3:cc",
+        "ssid": "CENTI-GARZOTA",
+        "rssi": -72.8179797979798
+      },
+      {
+        "bssid": "c0:25:67:58:17:ec",
+        "ssid": "Nexxt_5817EC-2.4G",
+        "rssi": -89.375
+      },
+      {
+        "bssid": "d8:07:b6:e5:62:46",
+        "ssid": "MAGELUBADAMA_EXT",
+        "rssi": -80.11174242424242
+      },
+      {
+        "bssid": "90:9a:4a:05:86:d4",
+        "ssid": "MiNetwork_2.4G",
+        "rssi": -55.38333333333334
+      },
+      {
+        "bssid": "d8:0d:17:4a:8e:07",
+        "ssid": "MAGELUBADAMA",
+        "rssi": -88.5462962962963
+      },
+      {
+        "bssid": "fc:ec:da:81:ff:ed",
+        "ssid": "Soriseg",
+        "rssi": -77.66666666666667
+      }
+    ]
+  },
+  {
+    "cuadriculaId": 3,
+    "verticeX": 400.802,
+    "verticeY": 119.173,
+    "ancho": 21.0,
+    "alto": 21.0,
+    "nodo": {
+      "id": "C",
+      "nodoX": 405.0,
+      "nodoY": 127.0,
+      "vecinos": [
+        "A",
+        "E"
+      ]
+    },
+    "listaRefinada": [
+      {
+        "bssid": "44:22:7c:5d:36:dc",
+        "ssid": "NETLIFE-gyeaabatistab1",
+        "rssi": -77.34722222222221
+      },
+      {
+        "bssid": "90:9a:4a:05:86:d4",
+        "ssid": "MiNetwork_2.4G",
+        "rssi": -51.31666666666666
+      },
+      {
+        "bssid": "e8:d7:65:11:71:c4",
+        "ssid": "NETLIFE-COELLO",
+        "rssi": -78.27499999999999
+      },
+      {
+        "bssid": "7c:16:89:b9:14:18",
+        "ssid": "Claro_SOLTRADING",
+        "rssi": -80.15151515151514
+      }
+    ]
+  },
+  {
+    "cuadriculaId": 4,
+    "verticeX": 421.802,
+    "verticeY": 119.173,
+    "ancho": 21.0,
+    "alto": 21.0,
+    "nodo": {
+      "id": "D",
+      "nodoX": 436.0,
+      "nodoY": 127.0,
+      "vecinos": [
+        "B",
+        "G"
+      ]
+    },
+    "listaRefinada": [
+      {
+        "bssid": "98:1a:35:83:51:bc",
+        "ssid": "NETLIFE-gyemmdillont1",
+        "rssi": -83.02083333333334
+      },
+      {
+        "bssid": "e8:d7:65:11:71:c4",
+        "ssid": "NETLIFE-COELLO",
+        "rssi": -75.3111111111111
+      },
+      {
+        "bssid": "6c:34:91:41:68:a0",
+        "ssid": "CLARO_PEREZ",
+        "rssi": -82.81944444444444
+      },
+      {
+        "bssid": "90:9a:4a:05:86:d4",
+        "ssid": "MiNetwork_2.4G",
+        "rssi": -56.2
+      },
+      {
+        "bssid": "70:4f:57:fb:bb:86",
+        "ssid": "Recepcion",
+        "rssi": -83.86447811447812
+      }
+    ]
+  }
+]
