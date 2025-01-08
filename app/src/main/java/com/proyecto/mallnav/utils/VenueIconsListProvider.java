@@ -26,6 +26,7 @@ public class VenueIconsListProvider {
         VenueIconsList.add(new VenueIconObj(R.drawable.ic_venue_pharmacies, "Farmacia"));
         VenueIconsList.add(new VenueIconObj(R.drawable.ic_venue_supermarket, "Supermercado"));
         VenueIconsList.add(new VenueIconObj(R.drawable.ic_venue_clothing, "Ropa"));
+        VenueIconsList.add(new VenueIconObj(R.drawable.add_circle_24px, "nulo"));
     }
 
 }

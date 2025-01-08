@@ -24,11 +24,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.proyecto.mallnav.R;
 import com.proyecto.mallnav.ui.activities.LoginActivity;
+import com.proyecto.mallnav.ui.activities.MainActivity;
 
 public class ProfileFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mfirestore;
+    private String adminId = null;
     static DocumentReference docRef;
     Button mEdit, mLogout;
     TextView mNombre, mCorreo;
@@ -37,7 +39,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        adminId = "PMRxKOxT9ZPdbcg2VRyiV9RsIGq1";
     }
 
     @Override
@@ -54,7 +56,13 @@ public class ProfileFragment extends Fragment {
         FirebaseUser user = mAuth.getCurrentUser();
         String userId = user.getUid();
         mfirestore = FirebaseFirestore.getInstance();
-        docRef = mfirestore.collection("user").document(userId);
+        if(userId.equals(adminId)){
+            docRef = mfirestore.collection("admin").document(userId);
+        }
+        else {
+            docRef = mfirestore.collection("user").document(userId);
+        }
+
         docRef.get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override

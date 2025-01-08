@@ -52,7 +52,7 @@ public class VenueListAdapter extends VenuesListAdapterBase<VenueViewHolder> {
         } else {
             currentList.clear();
             for (Venue venue : rawList) {
-                if (venue.getNombre().toLowerCase().contains(query.toLowerCase())) {
+                if (venue.getNombre().toLowerCase().contains(query.toLowerCase()) && venue.getCategoria_id() != -1) {
                     currentList.add(venue);
                 }
             }

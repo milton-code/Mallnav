@@ -28,6 +28,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.proyecto.mallnav.R;
 import com.proyecto.mallnav.models.AccessPoint;
 import com.proyecto.mallnav.models.Cuadricula;
+import com.proyecto.mallnav.models.Nodo;
 import com.proyecto.mallnav.models.Sector;
 import com.proyecto.mallnav.ui.activities.MainActivity;
 import com.proyecto.mallnav.utils.CuadriculaListProvider;
@@ -120,7 +121,7 @@ public class WifiScanService extends Service {
     private void geolocalizarUsuario(List<ScanResult> scanResults){
         nearestCuad = getNearestCuad(scanResults);
         if (nearestCuad != null) {
-            showCurrentPosition(nearestCuad.getNodo().getNodoX(), nearestCuad.getNodo().getNodoY());
+            showCurrentPosition(nearestCuad.getNodo());
             Toast.makeText(getApplicationContext(),"Estas en la cuadricula: "+nearestCuad.getCuadriculaId(), Toast.LENGTH_SHORT).show();
         }
         else {
@@ -128,9 +129,9 @@ public class WifiScanService extends Service {
         }
     }
 
-    private void showCurrentPosition(float nodoX, float nodoY) {
+    private void showCurrentPosition(Nodo updatedPosition) {
         if (viewModel != null) {
-            viewModel.updatePosition(nodoX, nodoY);
+            viewModel.updatePosition(updatedPosition);
         }
     }
 

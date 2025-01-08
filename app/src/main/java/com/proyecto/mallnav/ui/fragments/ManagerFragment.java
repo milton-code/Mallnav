@@ -3,8 +3,9 @@ package com.proyecto.mallnav.ui.fragments;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import static com.proyecto.mallnav.utils.Constants.KEY_FINGERPRINT;
-import static com.proyecto.mallnav.utils.Constants.KEY_GEOLOCALIZAR;
+import static com.proyecto.mallnav.utils.Constants.CATEGORY_SELECTED;
+import static com.proyecto.mallnav.utils.Constants.KEY_CATEGORY_ID;
+import static com.proyecto.mallnav.utils.Constants.KEY_CATEGORY_NAME;
 import static com.proyecto.mallnav.utils.Constants.VENUE_SELECTED;
 import static com.proyecto.mallnav.utils.Constants.KEY_VENUE_NAME;
 
@@ -38,6 +39,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,12 +51,21 @@ import com.google.android.material.textview.MaterialTextView;
 import com.proyecto.mallnav.R;
 
 import com.proyecto.mallnav.adapters.venues.VenueListAdapter;
+import com.proyecto.mallnav.models.Categoria;
 import com.proyecto.mallnav.models.Nodo;
 import com.proyecto.mallnav.models.Sector;
 import com.proyecto.mallnav.models.Venue;
 import com.proyecto.mallnav.models.VenueIconObj;
 import com.proyecto.mallnav.service.WifiScanService;
+/*import com.proyecto.mallnav.ui.custom.lists.BottomSheetListView;
+import com.proyecto.mallnav.ui.dialogs.sheets.BottomSheetVenue;
+import com.proyecto.mallnav.utils.ColorUtils;
+import com.proyecto.mallnav.utils.DimensionUtils;
+import com.proyecto.mallnav.utils.VenueIconsListProvider;
+import com.proyecto.mallnav.viewmodel.NavigationViewModel;*/
 import com.proyecto.mallnav.ui.dialogs.BottomSheetVenue;
+import com.proyecto.mallnav.ui.dialogs.UpdateFragment;
+import com.proyecto.mallnav.utils.ContentManager;
 import com.proyecto.mallnav.utils.CuadriculaListProvider;
 import com.proyecto.mallnav.utils.KeyboardController;
 import com.proyecto.mallnav.utils.PathMaker;
@@ -68,11 +79,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class NavigationFragment extends BaseFragment {
+public class ManagerFragment extends Fragment {
     //ViewModels
     private VenueViewModel venueViewModel;
-    private NavigationViewModel navigationViewModel;
-    private RouteViewModel routeViewModel;
+
     //Venues//
     private ImageView venueIcon = null;
     private List<ImageView> venueMapIconList = new ArrayList<>();
@@ -90,29 +100,17 @@ public class NavigationFragment extends BaseFragment {
     private StateReceiver mStateReceiver = null;
     private IntentFilter mStateReceiverFilter = null;
     //Warnings
-    private MaterialTextView mWarningMessage = null;
+
     //UI
     private float density = -1.0f;
-    private float posX = -1f;
-    private float posY = -1f;
-    private List<Nodo> listaNodos = null;
+
     private ConstraintLayout mNavigationLayout = null;
     private FrameLayout mNavigationMapContainer = null;
     private FrameLayout mNavigationMapContainerIcons = null;
     private FrameLayout mTransparentBackground = null;
-    private FrameLayout mAdjustModeButton = null;
-    private FrameLayout mFingerprintButton = null;
-    private ImageView currPos = null;
-    private CardView rutaCardView = null;
-    private MaterialButton rutaCloseButton = null;
-    private TextView destinoRuta = null;
-    private TextView guiaRuta = null;
-    private List<Nodo> ruta = Collections.emptyList();
-    private PathMaker.PathOverlay rutaOverlay = null;
     private MaterialDividerItemDecoration mItemDivider = null;
     //MapView
     private PhotoView mapView = null;
-
 
 
     @Override
@@ -120,23 +118,19 @@ public class NavigationFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         density = displayMetrics.density;
-        Log.d("Density", "Screen density: " + density);
-        CuadriculaListProvider.cargarCuadriculas(requireContext(), "mediciones.json");
         initViewModels();
         initBroadcastReceiver();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_navigation, container, false);
+        View view = inflater.inflate(R.layout.fragment_manager, container, false);
         initViews(view);
         setViewsParams();
         initAdapters();
         setAdapters();
         setViewsListeners();
-        listaNodos = CuadriculaListProvider.obtenerListaNodos();
         setObservers();
-        updateWarningMessageState();
         return view;
     }
 
@@ -153,46 +147,9 @@ public class NavigationFragment extends BaseFragment {
         removeListeners();
     }
 
-    @Override
-    protected void updateWarningMessageState(){
-
-        if (!isWifiEnabled() && !isGpsEnabled()){
-            showWarning(getString(R.string.err_navigation_state_gps_wifi));
-            return;
-        }
-
-        if (!isWifiEnabled()){
-            showWarning(getString(R.string.err_navigation_state_wifi));
-            return;
-        }
-
-        if (!isGpsEnabled()){
-            showWarning(getString(R.string.err_navigation_state_gps));
-            return;
-        }
-
-        hideWarning();
-    }
-
-    private void showWarning(String message) {
-        mWarningMessage.setText(message);
-        mWarningMessage.setVisibility(VISIBLE);
-    }
-
-    private void hideWarning() {
-        mWarningMessage.setVisibility(GONE);
-    }
-
-    @Override
-    protected void updateStatusBar() {
-        window.setStatusBarColor(ContextCompat.getColor(requireActivity(), R.color.colorOnBackground));
-    }
-
     private void initViewModels() {
         venueViewModel = new ViewModelProvider(this).get(VenueViewModel.class);
-        navigationViewModel = new ViewModelProvider(requireActivity()).get(NavigationViewModel.class);
-        routeViewModel = new ViewModelProvider(requireActivity()).get(RouteViewModel.class);
-        WifiScanService.setViewModel(navigationViewModel);
+        ContentManager.setViewModel(venueViewModel);
     }
 
     private void initBroadcastReceiver() {
@@ -213,21 +170,13 @@ public class NavigationFragment extends BaseFragment {
         window = requireActivity().getWindow();
         mNavigationLayout = view.findViewById(R.id.navigation__navigation_layout);
         mNavigationMapContainer = view.findViewById(R.id.navigation_map_container);
-        mNavigationMapContainerIcons = view.findViewById(R.id.navigation_map_container_icons);
+        mNavigationMapContainerIcons = view.findViewById(R.id.navigation_map_container_icons_mng);
         mapView = view.findViewById(R.id.navigation__map_view);
-        currPos = view.findViewById(R.id.current_position);
-        rutaCardView = view.findViewById(R.id.rutaCardView);
-        rutaCloseButton = view.findViewById(R.id.ruta_btn_close);
-        destinoRuta = view.findViewById(R.id.destinoRuta);
-        guiaRuta = view.findViewById(R.id.guiaRuta);
         mSearchLayout = view.findViewById(R.id.navigation_search);
         mTransparentBackground = view.findViewById(R.id.navigation__search_transparent_bg);
         mVenueListLayout = view.findViewById(R.id.navigation__venue_listview);
         mSearchBtnClose = view.findViewById(R.id.navigation__search_btn_close);
         mSearchField = view.findViewById(R.id.navigation__search_field);
-        mAdjustModeButton = view.findViewById(R.id.navigation__adjust_mode_button);
-        mFingerprintButton = view.findViewById(R.id.wifi__fingerprinting_mode_button);
-        mWarningMessage = view.findViewById(R.id.navigation__warning);
         mVenueListView = view.findViewById(R.id.recycler_list_venues);
         mItemDivider = new MaterialDividerItemDecoration(requireActivity(), MaterialDividerItemDecoration.VERTICAL);
         mVenueBottomSheet = new BottomSheetVenue();
@@ -243,8 +192,6 @@ public class NavigationFragment extends BaseFragment {
         mItemDivider.setDividerColor(ContextCompat.getColor(requireActivity(), R.color.colorBackground));
         mItemDivider.setLastItemDecorated(false);
         mVenueListView.addItemDecoration(mItemDivider);
-        currPos.setImageResource(R.drawable.ic_current_point);
-        currPos.setZ(1f);
     }
 
 
@@ -268,12 +215,7 @@ public class NavigationFragment extends BaseFragment {
 
         mSearchBtnClose.setOnClickListener(v -> onHandleCancelSearch());
 
-        rutaCloseButton.setOnClickListener(v -> {
-            routeViewModel.setIsRoutingEnabled(false);
-            rutaCardView.setVisibility(GONE);
-            mTransparentBackground.setVisibility(VISIBLE);
-            mNavigationMapContainer.removeView(rutaOverlay);
-        });
+///////////
         mapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -290,156 +232,30 @@ public class NavigationFragment extends BaseFragment {
 
         mapView.setOnMatrixChangeListener(rect -> {
             applyVenueIconTransformations();
-            actualizarCurrPos(posX, posY);
-            ajustarNodosRuta(ruta);
         });
 
-        // Configurar el Listener
-        mAdjustModeButton.setOnClickListener(v -> {
-            boolean isEnabled = navigationViewModel.getIsScanningEnabled().getValue() != null
-                    && navigationViewModel.getIsScanningEnabled().getValue();
-            if(isWifiEnabled() && isGpsEnabled()) {
-                navigationViewModel.setIsScanningEnabled(!isEnabled);
-
-                if (!isEnabled) {
-                    startGeolocation();
-
-                } else {
-                    stopGeolocation();
-                }
-            }
-        });
-
-        mFingerprintButton.setOnClickListener(v -> {
-            if(isWifiEnabled() && isGpsEnabled()) {
-                Intent intent = new Intent(requireContext(), WifiScanService.class);
-                intent.setAction(KEY_FINGERPRINT);
-                requireContext().startService(intent);
-                Toast.makeText(requireContext(),"Fingerprinting activado",Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(requireContext(),"No se pudo activar el Fingerprinting",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        View.OnClickListener listenerRuta = new View.OnClickListener() {
+        View.OnClickListener listenerEliminarVenue = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(WifiScanService.nearestCuad != null) {
-                    mVenueBottomSheet.dismiss();
-                    routeViewModel.setPinnedVenueRoute(mPinVenue);
-                    routeViewModel.setIsRoutingEnabled(true);
-                }
-                else {
-                    Log.e("nearestCuad","El nearestCuad es null");
-                }
+                ContentManager contentManager = new ContentManager(getContext());
+                contentManager.eliminarVenue(mPinVenue);
+                //Toast.makeText(getContext(),"El venue ha sido eliminado",Toast.LENGTH_SHORT).show();
             }
         };
 
-        mVenueBottomSheet.setRouteButtonClick(listenerRuta);
-    }
-
-    public void establecerRuta(Nodo nodoStart) {
-        PathMaker pathMaker = new PathMaker(listaNodos, density);
-        String nodoEndId = Objects.requireNonNull(routeViewModel.getPinnedVenueRoute().getValue()).getSector().getNodoId();
-        if(Objects.equals(nodoStart.getId(), nodoEndId)){
-            routeViewModel.setIsRoutingEnabled(false);
-            rutaCardView.setVisibility(GONE);
-            mTransparentBackground.setVisibility(VISIBLE);
-            mNavigationMapContainer.removeView(rutaOverlay);
-            Toast.makeText(getContext(),"Usted ha llegado al destino", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Nodo nodoEnd = listaNodos.stream().filter(nodo -> nodo.getId().equals(nodoEndId)).findFirst().orElse(null);
-            ruta = pathMaker.crearRutaMasCorta(nodoStart, nodoEnd);////
-            rutaOverlay = pathMaker.crearRutaOverlay(getContext());
-            rutaOverlay.setZ(0f);
-            mNavigationMapContainer.addView(rutaOverlay);
-            ajustarNodosRuta(ruta);
-            mTransparentBackground.setVisibility(GONE);
-            destinoRuta.setText(routeViewModel.getPinnedVenueRoute().getValue().getNombre());
-            guiaRuta.setText(getGuia(ruta));
-            rutaCardView.setVisibility(VISIBLE);
-        }
-
-    }
-    public String getGuia(List<Nodo> ruta){
-        if(ruta.size() > 1){
-            String guiaX = null;
-            String guiaY = null;
-            float nodoStartX = ruta.get(0).getNodoX();
-            float nodoNextX = ruta.get(1).getNodoX();
-            float nodoStartY = ruta.get(0).getNodoY();
-            float nodoNextY = ruta.get(1).getNodoY();
-
-            if (nodoStartX < nodoNextX) {
-                guiaX = "derecha";
-            } else if (nodoStartX > nodoNextX) {
-                guiaX = "izquierda";
+        View.OnClickListener listenerActualizarVenue = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UpdateFragment updateFragment = new UpdateFragment(mPinVenue);
+                updateFragment.show(getChildFragmentManager(),"navegar a update fragment");
+                mVenueBottomSheet.dismiss();
             }
+        };
 
-            if (nodoStartY < nodoNextY) {
-                guiaY = "abajo";
-            } else if (nodoStartY > nodoNextY) {
-                guiaY = "arriba";
-            }
+        mVenueBottomSheet.setAgregarVenueButtonClick(listenerActualizarVenue);
+        mVenueBottomSheet.setEliminarVenueButtonClick(listenerEliminarVenue);
+        mVenueBottomSheet.setActualizarVenueButtonClick(listenerActualizarVenue);
 
-            if (nodoStartX == nodoNextX) {
-                return "Diríjase hacia " + guiaY;
-            } else if (nodoStartY == nodoNextY){
-                return "Diríjase hacia la " + guiaX;
-            }
-            
-            return "Diríjase hacia " + guiaY + " y a la " + guiaX;
-        }
-        return "";
-    }
-
-    private void ajustarNodosRuta(List<Nodo> ruta) {
-        if(!ruta.isEmpty()){
-            List<Pair<Float, Float>> listaCoordRuta = new ArrayList<>();
-            // Obtiene los valores de la matriz para aplicar escala y traslación
-            float[] matrixValues = new float[9];
-            mapView.getImageMatrix().getValues(matrixValues);
-            float scaleFactorX = matrixValues[Matrix.MSCALE_X];
-            float scaleFactorY = matrixValues[Matrix.MSCALE_Y];
-            float transX = matrixValues[Matrix.MTRANS_X];
-            float transY = matrixValues[Matrix.MTRANS_Y];
-
-            for (Nodo nodo : ruta) {
-                float nodoX = nodo.getNodoX();
-                float nodoY = nodo.getNodoY();
-                float adjustedX = (((nodoX + 1) * density) * scaleFactorX) + transX;
-                float adjustedY = (((nodoY + 2.5f) * density) * scaleFactorY) + transY;
-                Pair<Float, Float> coordRuta = new Pair<>(adjustedX, adjustedY);
-                listaCoordRuta.add(coordRuta);
-            }
-
-            rutaOverlay.setRutaCoord(listaCoordRuta);
-            rutaOverlay.invalidate();
-        }
-        else {
-            Log.e("Ruta","La ruta de nodos está vacia");
-        }
-    }
-
-    private void startGeolocation() {
-        Intent intent = new Intent(requireContext(), WifiScanService.class);
-        intent.setAction(KEY_GEOLOCALIZAR);
-        requireContext().startService(intent);
-        Toast.makeText(requireContext(),"Geolocalización activada",Toast.LENGTH_SHORT).show();
-    }
-
-    private void stopGeolocation() {
-        Intent intent = new Intent(requireContext(), WifiScanService.class);
-        requireContext().stopService(intent);
-        currPos.setVisibility(View.GONE);
-        routeViewModel.setIsRoutingEnabled(false);
-        rutaCardView.setVisibility(GONE);
-        mTransparentBackground.setVisibility(VISIBLE);
-        mNavigationMapContainer.removeView(rutaOverlay);
-        Toast.makeText(requireContext(),"Geolocalización desactivada",Toast.LENGTH_SHORT).show();
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
@@ -451,15 +267,15 @@ public class NavigationFragment extends BaseFragment {
         if (titleText.length() > 25) {
             titleText = titleText.substring(0, 24) + "…";
         }
-        if (Boolean.TRUE.equals(navigationViewModel.getIsScanningEnabled().getValue())) {
-            mVenueBottomSheet.setRouteButtonVisibility(VISIBLE);
-        }
-        else {
-            mVenueBottomSheet.setRouteButtonVisibility(GONE);
-        }
+
         mVenueBottomSheet.setSheetTitle(titleText);
         mVenueBottomSheet.setCategory(venueCategory);
         mVenueBottomSheet.setIcon(venueIcon);
+
+        mVenueBottomSheet.setAgregarVenueButtonVisibility(GONE);
+        mVenueBottomSheet.setActualizarVenueButtonVisibility(VISIBLE);
+        mVenueBottomSheet.setEliminarVenueButtonVisibility(VISIBLE);
+
         mVenueBottomSheet.show(getParentFragmentManager(), null);
     }
 
@@ -485,78 +301,21 @@ public class NavigationFragment extends BaseFragment {
                 Log.w("Observer", "No venues available to display");
             }
         });
-        //Observamos cambios en el isScanninEnabled para actualizar la UI
-        navigationViewModel.getIsScanningEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
-            mAdjustModeButton.setBackgroundResource(isEnabled ? R.drawable.bg_adjust_btn_active: R.drawable.bg_adjust_btn);
-        });
 
-        routeViewModel.getIsRoutingEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
-            /*if (isEnabled){
-                establecerRuta();
-            }*/
-        });
-        
-        navigationViewModel.getCurrentPosition().observe(getViewLifecycleOwner(), position -> {
-
-            if (position != null) {
-                posX = position.getNodoX();
-                posY = position.getNodoY();
-                currPos.setVisibility(View.VISIBLE);
-                actualizarCurrPos(posX, posY);
-                if(Boolean.TRUE.equals(routeViewModel.getIsRoutingEnabled().getValue())){
-                    mNavigationMapContainer.removeView(rutaOverlay);
-                    establecerRuta(position);
-                }
-            }
-            else {
-                Log.e("ErrorPosicion: ", "la posicion es nula");
-            }
-        });
     }
 
-    private void actualizarCurrPos(float posX, float posY) {
-        // Lógica para posicionar el ícono en el mapa
-        if (currPos.getVisibility() == GONE) {
-            Log.d("Matrix Listener", "Current position no es visible");
-            return;
-        }
-        // Obtiene los valores de la matriz para aplicar escala y traslación
-        float[] matrixValues = new float[9];
-        mapView.getImageMatrix().getValues(matrixValues);
-        float scaleFactorX = matrixValues[Matrix.MSCALE_X];
-        float scaleFactorY = matrixValues[Matrix.MSCALE_Y];
-        float transX = matrixValues[Matrix.MTRANS_X];
-        float transY = matrixValues[Matrix.MTRANS_Y];
-
-        // Calcular la nueva posición ajustada del ícono según el zoom y el desplazamiento
-        float adjustedX = (((posX + 1 - 2) * density) * scaleFactorX) + transX;
-        Log.d("currPosUpdate","currPosX: " + posX);
-        Log.d("currPosUpdate","adjustedX: "+adjustedX);
-        float adjustedY = (((posY + 2.5f -2) * density) * scaleFactorY) + transY;
-        Log.d("currPosUpdate","currPosY: "+ posY);
-        Log.d("currPosUpdate","adjustedY: "+adjustedY);
-        int adjustedWidth = Math.round(((4 * density) * scaleFactorX));
-        int adjustedHeight = Math.round(((4 * density) * scaleFactorY));
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(adjustedWidth,adjustedHeight);
-        currPos.setLayoutParams(layoutParams);
-        currPos.setX(adjustedX);
-        currPos.setY(adjustedY);
-    }
 
     private void addIconsToMapWhenReady(List<Venue> venues) {
         venueMapIconList.clear();
         mNavigationMapContainerIcons.removeAllViews();
         // Sabemos que los venues ya están cargados y listos para usarse
         for (Venue venue : venues) {
-                addMapVenueIcons(venue);
+            addMapVenueIcons(venue);
         }
         applyVenueIconTransformations();
     }
 
     private void addMapVenueIcons(Venue venue){
-        if(venue.getCategoria_id() == -1){
-            return;
-        }
         VenueIconObj venueIconObj = venue.getVenueIcon();
         Sector sector = venue.getSector();
         if (venueIconObj == null || sector == null) {
@@ -577,7 +336,13 @@ public class NavigationFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 mPinVenue = venue;
-                showVenueBottomSheet();
+                if(mPinVenue.getCategoria_id() != -1) {
+                    showVenueBottomSheet();
+                }
+                else {
+                    UpdateFragment updateFragment = new UpdateFragment(mPinVenue);
+                    updateFragment.show(getChildFragmentManager(),"navegar a update fragment");
+                }
             }
         });
 

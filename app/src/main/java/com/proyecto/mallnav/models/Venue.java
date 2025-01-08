@@ -77,4 +77,5 @@ public class Venue {
     public void setSector(Sector sector) {
         this.sector = sector;
     }
+
 }

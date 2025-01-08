@@ -71,4 +71,5 @@
     <dimen name="info_delay_text">20sp</dimen>
     <!--    route-->
     <dimen name="route_list_item_title">17sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

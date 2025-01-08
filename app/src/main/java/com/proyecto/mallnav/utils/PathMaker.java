@@ -1,10 +1,15 @@
 package com.proyecto.mallnav.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.proyecto.mallnav.R;
 import com.proyecto.mallnav.models.Nodo;
@@ -21,9 +26,11 @@ import java.util.Set;
 
 public class PathMaker {
     private final List<Nodo> listaNodos; // Nodos y sus vecinos
+    public static float density;
 
-    public PathMaker(List<Nodo> listaNodos) {
+    public PathMaker(List<Nodo> listaNodos, float density) {
         this.listaNodos = listaNodos;
+        PathMaker.density = density;
     }
     public List<Nodo> crearRutaMasCorta(Nodo nodoStart, Nodo nodoEnd) {
         //Cola para realizar la búsqueda por niveles
@@ -74,17 +81,17 @@ public class PathMaker {
     }
 
     // Método para añadir la superposición de ruta al mapa
-    public PathOverlay crearRutaOverlay(Context context, List<Nodo> ruta) {
-        return new PathOverlay(context, ruta);
+    public PathOverlay crearRutaOverlay(Context context) {
+        return new PathOverlay(context);
     }
 
 
-    private class PathOverlay extends View {
-        private final List<Nodo> ruta;
+    @SuppressLint("ViewConstructor")
+    public static class PathOverlay extends View {
+        private List<Pair<Float, Float>> rutaCoord;
         private final Paint paint;
-        public PathOverlay(Context context, List<Nodo> ruta) {
+        public PathOverlay(Context context) {
             super(context);
-            this.ruta = ruta;
             this.paint = new Paint();
             initPaint();
         }
@@ -95,18 +102,22 @@ public class PathMaker {
             paint.setAntiAlias(true);
         }
 
+        public void setRutaCoord(List<Pair<Float, Float>> rutaCoord) {
+            this.rutaCoord = rutaCoord;
+        }
+
         @Override
-        protected void onDraw(Canvas canvas) {
+        protected void onDraw(@NonNull Canvas canvas) {
             super.onDraw(canvas);
 
-            if (ruta == null || ruta.size() < 2) return;
+            if (rutaCoord == null || rutaCoord.size() < 2) return;
 
             // Dibujar líneas entre los nodos
-            for (int i = 0; i < ruta.size() - 1; i++) {
-                Nodo nodoActual = ruta.get(i);
-                Nodo nodoSiguiente = ruta.get(i + 1);
-                canvas.drawLine(nodoActual.getX(), nodoActual.getY(),
-                        nodoSiguiente.getX(), nodoSiguiente.getY(), paint);
+            for (int i = 0; i < rutaCoord.size() - 1; i++) {
+                Pair<Float, Float> coordActual = rutaCoord.get(i);
+                Pair<Float, Float> coordSiguiente = rutaCoord.get(i + 1);
+                canvas.drawLine(coordActual.first, coordActual.second,
+                        coordSiguiente.first, coordSiguiente.second, paint);
             }
         }
     }

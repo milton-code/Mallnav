@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.proyecto.mallnav.models.Categoria;
 import com.proyecto.mallnav.models.Sector;
 import com.proyecto.mallnav.models.Venue;
 import com.proyecto.mallnav.models.VenueIconObj;
@@ -21,11 +22,13 @@ public class VenueProvider {
     @SuppressLint("StaticFieldLeak")
     private static final FirebaseFirestore mfirestore = FirebaseFirestore.getInstance();
     public static List<Venue> venueList = new ArrayList<>();
+    public static List<Categoria> categoriaList = new ArrayList<>();
     public static List<VenueIconObj> icons = VenueIconsListProvider.VenueIconsList;
     public static List<Sector> sectores = SectorListProvider.SectorList;
 
 
     public static void initVenues(OnVenuesLoadedCallback callback) {
+        venueList.clear();
         CollectionReference venuesCollection = mfirestore.collection("venues");
         CollectionReference categoriasCollection = mfirestore.collection("categorias");
         CollectionReference sector_venueCollection = mfirestore.collection("sector_venue");
@@ -45,15 +48,21 @@ public class VenueProvider {
 
                         // Procesar las categorías
                         for (QueryDocumentSnapshot documentCategoria : categoriasTask.getResult()) {
+                            Categoria categoria = documentCategoria.toObject(Categoria.class);
+                            categoriaList.add(categoria);
+
                             int categoria_id = Objects.requireNonNull(documentCategoria.getLong("categoria_id")).intValue();
                             for (Venue venue : venueList) {
                                 if (venue.getCategoria_id() == categoria_id) {
                                     venue.setCategoria(documentCategoria.getString("nombre"));
                                 }
+                                if (venue.getCategoria_id() == -1){
+                                    venue.setCategoria("nulo");
+                                }
                             }
                         }
 
-                        // Procesar sector_venue y asignar a cada venue su sector correspondiente
+                        //Procesar sector_venue y asignar a cada venue su sector correspondiente
                         for (QueryDocumentSnapshot documentSectorVenue : sectorVenueTask.getResult()) {
                             int venue_id = Objects.requireNonNull(documentSectorVenue.getLong("venue_id")).intValue();
                             for (Venue venue : venueList) {
@@ -76,6 +85,7 @@ public class VenueProvider {
                             // Asignar sector basado en sector_id
                             for (Sector sector : sectores) {
                                 if (venue.getSector_id() == sector.getId()) {
+                                    sector.setVenueId(venue.getId());
                                     venue.setSector(sector);
                                 }
                             }

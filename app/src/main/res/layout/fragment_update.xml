@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    tools:context=".ui.dialogs.UpdateFragment"
+    android:paddingHorizontal="25dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp">
+
+        <LinearLayout
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <EditText
+                android:id="@+id/fragment__update_venue_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre del venue"
+                android:textSize="17sp"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="8dp"/>
+            <LinearLayout
+                android:id="@+id/selected_category_container"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:animateLayoutChanges="true"
+                android:padding="6dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true">
+                <TextView
+                    android:id="@+id/category_selected"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:hint="Seleccione una categoría"
+                    android:textSize="17sp"
+                    android:paddingVertical="5dp"/>
+                 <ImageView
+                     android:layout_width="0dp"
+                     android:layout_weight="1"
+                     android:layout_height="wrap_content"
+                     android:src="@drawable/arrow_drop_down_24px"
+                     android:backgroundTint="#00000000"
+                     android:layout_gravity="center_vertical"
+                     app:tint="@color/colorPrimary"/>
+
+            </LinearLayout>
+            <include
+                android:id="@+id/fragment__update_category_listview"
+                layout="@layout/category_list"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="0dp"
+                android:visibility="gone"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/update_venue_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Agregar venue"
+                android:textAllCaps="false"
+                android:textSize="17sp"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

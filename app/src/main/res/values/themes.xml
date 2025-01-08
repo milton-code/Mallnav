@@ -31,6 +31,14 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="materialButtonStyle">@style/Theme.Mallnav.Button.Blue</item>
+    </style>
+
+
     <style name="Theme.Mallnav.BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -151,6 +159,11 @@
         <item name="android:padding">@dimen/warning_padding</item>
         <item name="android:textColor">@color/colorOnBackground</item>
         <item name="android:textSize">@dimen/warning_text</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Mallnav" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
 </resources>

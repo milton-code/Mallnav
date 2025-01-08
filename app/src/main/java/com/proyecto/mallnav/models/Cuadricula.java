@@ -13,11 +13,6 @@ public class Cuadricula {
     private List<AccessPoint> listaRefinada;
 
 
-    //private boolean esAccesible;
-    //private boolean esParcialmenteAccesible;
-    //private float xMedicion;
-    //private float yMedicion;
-
     public Cuadricula(int cuadriculaId, float verticeX, float verticeY, float ancho, float alto, Nodo nodo,
                       List<AccessPoint> listaRefinada) {
         this.cuadriculaId = cuadriculaId;

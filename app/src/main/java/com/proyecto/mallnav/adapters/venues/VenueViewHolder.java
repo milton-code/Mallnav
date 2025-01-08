@@ -2,8 +2,6 @@ package com.proyecto.mallnav.adapters.venues;
 
 import com.proyecto.mallnav.models.Venue;
 import static com.proyecto.mallnav.utils.Constants.KEY_VENUE_NAME;
-import static com.proyecto.mallnav.utils.Constants.KEY_VENUE_POINT;
-import static com.proyecto.mallnav.utils.Constants.KEY_VENUE_SUBLOCATION;
 import static com.proyecto.mallnav.utils.Constants.VENUE_SELECTED;
 
 import android.content.Intent;

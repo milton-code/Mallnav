@@ -64,19 +64,7 @@ public class CuadriculaListProvider {
         }
         return bssid;
     }
-
-    public static Map<String, List<String >> obtenerGrafoNodos(){
-        Map<String, List<String >> grafoNodos = new HashMap<>();
-        String nodoId;
-        List<String> vecinos;
-
-        for (Cuadricula cuadricula : cuadriculaList){
-            nodoId = cuadricula.getNodo().getId();
-            vecinos = cuadricula.getNodo().getVecinos();
-            grafoNodos.put(nodoId, vecinos);
-        }
-        return grafoNodos;
-    }
+    
 
     public static List<Nodo> obtenerListaNodos(){
         Nodo nodo;

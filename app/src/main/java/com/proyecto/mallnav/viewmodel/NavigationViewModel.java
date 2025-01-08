@@ -8,13 +8,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.proyecto.mallnav.models.Nodo;
+import com.proyecto.mallnav.models.Venue;
 
 import java.util.List;
 
 public class NavigationViewModel extends ViewModel {
     private final MutableLiveData<Boolean> isScanningEnabled = new MutableLiveData<>(false);
-    private final MutableLiveData<Pair<Float, Float>> currentPosition = new MutableLiveData<>();
-    private final MutableLiveData<List<Nodo>> rutaActual = new MutableLiveData<>();
+    private final MutableLiveData<Nodo> currentPosition = new MutableLiveData<>();
+
 
     public LiveData<Boolean> getIsScanningEnabled() {
         return isScanningEnabled;
@@ -23,18 +24,11 @@ public class NavigationViewModel extends ViewModel {
         isScanningEnabled.setValue(enabled);
     }
 
-    public LiveData<Pair<Float, Float>> getCurrentPosition() {
+    public LiveData<Nodo> getCurrentPosition() {
         return currentPosition;
     }
-    public void updatePosition(Float x, Float y) {
-        currentPosition.setValue(new Pair<>(x, y));
+    public void updatePosition(Nodo updatedPosition) {
+        currentPosition.setValue(updatedPosition);
     }
 
-    
-    public LiveData<List<Nodo>> getRutaActual() {
-        return rutaActual;
-    }
-    public void actualizarRuta(List<Nodo> nuevaRuta) {
-        rutaActual.setValue(nuevaRuta);
-    }
 }
