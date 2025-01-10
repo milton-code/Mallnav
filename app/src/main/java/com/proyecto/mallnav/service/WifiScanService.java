@@ -69,23 +69,14 @@ public class WifiScanService extends Service {
                 if (scanResults != null) {
                     fingerprintRaw.add(scanResults);
                     captureCount++;
-                    Log.d("Fingerprinting", "Captura " + captureCount + " realizada.");
                 } else {
                     Log.e("Fingerprinting", "Error al realizar el escaneo Wi-Fi.");
+                    return;
                 }
-                handler.postDelayed(this, 5000); // Reprograma la siguiente captura
+                handler.postDelayed(this, 5000);
             } else {
-                Log.d("Fingerprinting", "Capturas completas. Generando CSV...");
-
-                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    Log.d("Fingerprinting", "No cuentas con el permiso de almacenamiento externo publico");
-                } else {
-                    // Ya tiene el permiso, procede a generar los CSV
-                    generarCsv(fingerprintRaw);
-                }
-
-                stopFingerprinting(); // Detén el proceso después de generar los archivos
+                generarCsv(fingerprintRaw);
+                stopFingerprinting();
             }
         }
     };
@@ -117,16 +108,23 @@ public class WifiScanService extends Service {
             return null;
         }
     }
-
+    private Cuadricula getNearestCuad(List<ScanResult> scanResults) {
+        Cuadricula nearestCuad = null;
+        double distanciaMin = Double.MAX_VALUE;
+        List<ScanResult> filteredScanResults = filterScanResults(scanResults);
+        for(Cuadricula cuadricula : CuadriculaListProvider.cuadriculaList){
+            List<AccessPoint> fingerprint = cuadricula.getListaRefinada();
+            double distance = calcularDistancia(fingerprint, filteredScanResults);
+            if (distance < distanciaMin){
+                distanciaMin = distance;
+                nearestCuad = cuadricula;
+            }
+        }
+        return nearestCuad;
+    }
     private void geolocalizarUsuario(List<ScanResult> scanResults){
         nearestCuad = getNearestCuad(scanResults);
-        if (nearestCuad != null) {
-            showCurrentPosition(nearestCuad.getNodo());
-            Toast.makeText(getApplicationContext(),"Estas en la cuadricula: "+nearestCuad.getCuadriculaId(), Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(getApplicationContext(),"No es posible ubicarlo!", Toast.LENGTH_SHORT).show();
-        }
+        showCurrentPosition(nearestCuad.getNodo());
     }
 
     private void showCurrentPosition(Nodo updatedPosition) {
@@ -135,26 +133,6 @@ public class WifiScanService extends Service {
         }
     }
 
-    private Cuadricula getNearestCuad(List<ScanResult> scanResults) {
-        Cuadricula nearestCuad = null;
-        double distanciaMin = Double.MAX_VALUE;
-        List<ScanResult> filteredScanResults = filterScanResults(scanResults);
-        Log.d("CalculoDistancia","filteredScanResults: "+ filteredScanResults.size());
-
-        for(Cuadricula cuadricula : CuadriculaListProvider.cuadriculaList){
-            Log.d("CalculoDistancia","Cuadricula: "+ cuadricula.getCuadriculaId());
-            List<AccessPoint> fingerprint = cuadricula.getListaRefinada();
-            double distance = calcularDistancia(fingerprint, filteredScanResults);
-            Log.d("CalculoDistancia","Distancia: "+ distance);
-                if (distance < distanciaMin){
-                    distanciaMin = distance;
-                    nearestCuad = cuadricula;
-                }
-        }
-        Log.d("CalculoDistancia","CuadriculaDevuelta: "+ nearestCuad.getCuadriculaId());
-        Log.d("CalculoDistancia","DistanciaMinima: "+ distanciaMin);
-        return nearestCuad;
-    }
 
     private double calcularDistancia(List<AccessPoint> fingerprint, List<ScanResult> filteredScanResults){
         double mismatch = Double.MAX_VALUE;
@@ -170,7 +148,7 @@ public class WifiScanService extends Service {
                 }
             }
         }
-        //Log.d("CalculoDistancia","Coincidencias: " + coincidencias);
+
         if (coincidencias > 0) {
             double distancia = Math.sqrt(suma);
             // Penalizar si hay pocas coincidencias

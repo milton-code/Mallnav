@@ -372,25 +372,21 @@ public class NavigationFragment extends BaseFragment {
             float nodoNextX = ruta.get(1).getNodoX();
             float nodoStartY = ruta.get(0).getNodoY();
             float nodoNextY = ruta.get(1).getNodoY();
-
             if (nodoStartX < nodoNextX) {
                 guiaX = "derecha";
             } else if (nodoStartX > nodoNextX) {
                 guiaX = "izquierda";
             }
-
             if (nodoStartY < nodoNextY) {
                 guiaY = "abajo";
             } else if (nodoStartY > nodoNextY) {
                 guiaY = "arriba";
             }
-
             if (nodoStartX == nodoNextX) {
                 return "Diríjase hacia " + guiaY;
             } else if (nodoStartY == nodoNextY){
                 return "Diríjase hacia la " + guiaX;
             }
-            
             return "Diríjase hacia " + guiaY + " y a la " + guiaX;
         }
         return "";
@@ -490,11 +486,6 @@ public class NavigationFragment extends BaseFragment {
             mAdjustModeButton.setBackgroundResource(isEnabled ? R.drawable.bg_adjust_btn_active: R.drawable.bg_adjust_btn);
         });
 
-        routeViewModel.getIsRoutingEnabled().observe(getViewLifecycleOwner(), isEnabled -> {
-            /*if (isEnabled){
-                establecerRuta();
-            }*/
-        });
         
         navigationViewModel.getCurrentPosition().observe(getViewLifecycleOwner(), position -> {
 
@@ -567,9 +558,7 @@ public class NavigationFragment extends BaseFragment {
         venueIcon = new ImageView(requireContext());
         venueIcon.setImageResource(venue.getVenueIcon().getImageDrawable());
         int ogPointX = venue.getSector().getPointX() + 4;
-        Log.w("IconoAdded", "puntoX: "+ogPointX);
         int ogPointY = venue.getSector().getPointY() + 4;
-        Log.w("IconoAdded", "puntoY: "+ogPointY);
 
         venueIcon.setTag(R.id.venueIconWidth,ogPointX);
         venueIcon.setTag(R.id.venueIconHeight,ogPointY);
@@ -582,7 +571,6 @@ public class NavigationFragment extends BaseFragment {
         });
 
         mNavigationMapContainerIcons.addView(venueIcon);
-        Log.w("IconoAdded", "se ha añadido el venue: "+venue.getNombre());
         venueMapIconList.add(venueIcon);
     }
 

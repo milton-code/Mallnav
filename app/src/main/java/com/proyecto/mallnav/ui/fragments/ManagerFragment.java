@@ -215,7 +215,6 @@ public class ManagerFragment extends Fragment {
 
         mSearchBtnClose.setOnClickListener(v -> onHandleCancelSearch());
 
-///////////
         mapView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -239,7 +238,6 @@ public class ManagerFragment extends Fragment {
             public void onClick(View v) {
                 ContentManager contentManager = new ContentManager(getContext());
                 contentManager.eliminarVenue(mPinVenue);
-                //Toast.makeText(getContext(),"El venue ha sido eliminado",Toast.LENGTH_SHORT).show();
             }
         };
 

@@ -16,7 +16,7 @@ import com.proyecto.mallnav.R;
 
 public class VenueViewHolder extends RecyclerView.ViewHolder {
 
-    protected TextView venueName = null;
+    protected TextView venueName;
 
     public VenueViewHolder(@NonNull View itemView) {
         super(itemView);

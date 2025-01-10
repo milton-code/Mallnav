@@ -16,7 +16,7 @@ import com.proyecto.mallnav.models.Categoria;
 
 
 public class CategoryViewHolder extends RecyclerView.ViewHolder{
-    protected TextView categoryName = null;
+    protected TextView categoryName;
     public CategoryViewHolder(@NonNull View itemView) {
         super(itemView);
         categoryName = itemView.findViewById(R.id.li_category_name);

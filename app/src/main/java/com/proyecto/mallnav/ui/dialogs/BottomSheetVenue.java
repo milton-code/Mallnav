@@ -46,10 +46,8 @@ public class BottomSheetVenue extends BottomSheetDialogFragment {
         initViews(view);
         setViewsParams();
         setViewsListeners();
-
         return view;
     }
-
     private void initViews(View view) {
         mSheetTitle       = view.findViewById(R.id.venue_dialog__title);
         mVenueCategory = view.findViewById(R.id.venue_dialog__category);

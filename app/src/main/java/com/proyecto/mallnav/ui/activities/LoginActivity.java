@@ -25,8 +25,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 
 
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.proyecto.mallnav.R;
 import com.proyecto.mallnav.ui.fragments.RegistroFragment;
@@ -39,11 +37,9 @@ import java.util.Objects;
 public class LoginActivity extends AppCompatActivity {
     private ActivityResultLauncher<String[]> requestPermissionLauncher;
     private int version = Build.VERSION.SDK_INT;
-    static DocumentReference docRef;
     private FirebaseFirestore mfirestore;
     EditText mCorreo, mPassword;
     Button mLogin;
-    String correoAdmin;
     private FirebaseAuth mAuth;
 
 
@@ -56,9 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         mLogin = findViewById(R.id.buttonLogin);
         mAuth = FirebaseAuth.getInstance();
         mfirestore = FirebaseFirestore.getInstance();
-        //String userId = "PMRxKOxT9ZPdbcg2VRyiV9RsIGq1";
-        //docRef = mfirestore.collection("admin").document(userId);
-
 
 
         //Inicializar el launcher para la solicitud de permisos
@@ -79,7 +72,6 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         initPermissionLauncher();
-        //initDocRef();
 
         //Definir listener del boton de inicio de sesión
         mLogin.setOnClickListener(new View.OnClickListener() {
@@ -114,16 +106,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /*private void initDocRef(){
-        docRef.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot document = task.getResult();
-                        correoAdmin = document.getString("e_mail");
-                    }
-                });
-    }*/
 
     private void initPermissionLauncher(){
         if (version>= Build.VERSION_CODES.S){
@@ -131,14 +113,11 @@ public class LoginActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                            != PackageManager.PERMISSION_GRANTED ||
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN)
                             != PackageManager.PERMISSION_GRANTED){
                 // Solicitar permisos
                 requestPermissionLauncher.launch(new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.BLUETOOTH_SCAN
+                        Manifest.permission.ACCESS_COARSE_LOCATION
                 });
             }
         }

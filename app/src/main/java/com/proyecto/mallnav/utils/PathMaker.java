@@ -33,24 +33,17 @@ public class PathMaker {
         PathMaker.density = density;
     }
     public List<Nodo> crearRutaMasCorta(Nodo nodoStart, Nodo nodoEnd) {
-        //Cola para realizar la búsqueda por niveles
         Queue<Nodo> cola = new LinkedList<>();
         Map<Nodo, Nodo> predecesores = new HashMap<>();
         Set<Nodo> visitados = new HashSet<>();
-
         cola.add(nodoStart);
         visitados.add(nodoStart);
-
-        // Realizar búsqueda por niveles
         while (!cola.isEmpty()) {
             Nodo nodoActual = cola.poll();
-
             if (nodoActual.equals(nodoEnd)) {
-                // Nodo destino encontrado, reconstruir la ruta
                 List<Nodo> ruta = reconstruirRuta(nodoStart, nodoEnd, predecesores);
                 return ruta;
             }
-
             for (String vecinoId : nodoActual.getVecinos()) {
                 Nodo nodoVecino = listaNodos.stream().filter(nodo -> nodo.getId().equals(vecinoId)).findFirst().orElse(null);
                 if (!visitados.contains(nodoVecino)) {
@@ -61,7 +54,6 @@ public class PathMaker {
             }
         }
 
-        // Si no hay ruta al nodo destino
         return Collections.emptyList();
     }
 
