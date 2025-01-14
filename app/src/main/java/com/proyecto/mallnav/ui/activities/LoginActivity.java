@@ -26,6 +26,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.proyecto.mallnav.R;
 import com.proyecto.mallnav.ui.fragments.RegistroFragment;
 
@@ -38,6 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityResultLauncher<String[]> requestPermissionLauncher;
     private int version = Build.VERSION.SDK_INT;
     private FirebaseFirestore mfirestore;
+    FirebasePerformance performance = FirebasePerformance.getInstance();
+    Trace loginTrace = performance.newTrace("login_trace");
     EditText mCorreo, mPassword;
     Button mLogin;
     private FirebaseAuth mAuth;
@@ -82,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(correo.isEmpty()||password.isEmpty()){
                     Toast.makeText(LoginActivity.this,"Ingrese sus credenciales",Toast.LENGTH_SHORT).show();
                 }else {
+                    loginTrace.start();
                     iniciarSesion(correo, password);
                 }
             }
@@ -94,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
+                    loginTrace.stop();
                     openMainScreen();
                     Toast.makeText(LoginActivity.this,"Bienvenido",Toast.LENGTH_SHORT).show();
                 }
@@ -101,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                loginTrace.incrementMetric("error_count", 1);
+                loginTrace.stop();
                 Toast.makeText(LoginActivity.this,"Credenciales incorrectas",Toast.LENGTH_SHORT).show();
             }
         });
