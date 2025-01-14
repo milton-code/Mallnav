@@ -44,7 +44,6 @@ public class CuadriculaListProvider {
             }
             reader.close();
         } catch (IOException e) {
-            e.printStackTrace();
             Log.e("Carga cuadriculas", Objects.requireNonNull(e.getMessage()));
         }
 
