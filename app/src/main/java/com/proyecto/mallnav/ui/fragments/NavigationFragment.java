@@ -123,7 +123,7 @@ public class NavigationFragment extends BaseFragment {
         Log.d("Density", "Screen density: " + density);
         CuadriculaListProvider.cargarCuadriculas(requireContext(), "mediciones.json");
         initViewModels();
-        initBroadcastReceiver();
+        initReceiver();
     }
 
     @Override
@@ -195,7 +195,7 @@ public class NavigationFragment extends BaseFragment {
         WifiScanService.setViewModel(navigationViewModel);
     }
 
-    private void initBroadcastReceiver() {
+    private void initReceiver() {
         mStateReceiver = new StateReceiver();
         mStateReceiverFilter = new IntentFilter();
         mStateReceiverFilter.addAction(VENUE_SELECTED);
