@@ -8,6 +8,8 @@ import android.widget.Toast;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.proyecto.mallnav.models.Venue;
 import com.proyecto.mallnav.viewmodel.VenueViewModel;
 
@@ -21,6 +23,9 @@ public class ContentManager {
     private FirebaseFirestore mFirestore;
     private final Context context;
     private static VenueViewModel viewModel = null;
+    static FirebasePerformance performance = FirebasePerformance.getInstance();
+    static Trace updateTrace = performance.newTrace("actualizar_venue");
+    static Trace deleteTrace = performance.newTrace("eliminar_venue");
 
 
     public ContentManager(Context context){
@@ -34,6 +39,7 @@ public class ContentManager {
     }
 
     public void actualizarVenue(Venue mPinVenue, String NombreUpd, int categoriaIdUpd){
+        updateTrace.start();
         int venueId = mPinVenue.getId();
         int venueCategoriaId = mPinVenue.getCategoria_id();
         String mensaje;
@@ -51,6 +57,7 @@ public class ContentManager {
                                 mapa.put("nombre", NombreUpd);
                                 venuesCollection.document(document.getId()).update(mapa)
                                         .addOnSuccessListener(aVoid -> {
+                                            updateTrace.stop();
                                             Toast.makeText(context,mensaje,Toast.LENGTH_SHORT).show();
                                             viewModel.loadVenues();
                                         })
@@ -62,6 +69,8 @@ public class ContentManager {
                             Log.e("CManager","No se encontró ningún venue con el ID: " + venueId);
                         }
                     } else {
+                        updateTrace.incrementMetric("actualizar_venue_errors", 1);
+                        updateTrace.stop();
                         Log.e("CManager", "Error al buscar el venue: " + Objects.requireNonNull(task.getException()).getMessage());
                     }
 
@@ -69,6 +78,7 @@ public class ContentManager {
     }
 
     public void eliminarVenue(Venue mPinVenue){
+        deleteTrace.start();
         int venueId = mPinVenue.getId();
         venuesCollection
                 .whereEqualTo("venue_id", venueId).get()
@@ -81,6 +91,7 @@ public class ContentManager {
                                 mapa.put("nombre", "nulo");
                                 venuesCollection.document(document.getId()).update(mapa)
                                         .addOnSuccessListener(aVoid -> {
+                                            deleteTrace.stop();
                                             Toast.makeText(context,"Venue eliminado exitosamente",Toast.LENGTH_SHORT).show();
                                             viewModel.loadVenues();
                                         })
@@ -92,6 +103,8 @@ public class ContentManager {
                             Log.e("CManager","No se encontró ningún venue con el ID: " + venueId);
                         }
                     } else {
+                        deleteTrace.incrementMetric("eliminar_venue_errors", 1);
+                        deleteTrace.stop();
                         Log.e("CManager", "Error al buscar el venue: " + Objects.requireNonNull(task.getException()).getMessage());
                     }
                 });

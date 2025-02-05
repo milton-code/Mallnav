@@ -73,5 +73,24 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="icono_caminante">icono caminante</string>
+    <string name="icono_flecha">icono flecha</string>
+    <string name="ubicacion_actual">ubicación actual</string>
+    <string name="boton_de_navegacion">boton de navegación</string>
+    <string name="boton_de_fingerprinting">boton de fingerprinting</string>
+    <string name="guardar">guardar</string>
+    <string name="nuevo_apellido">Nuevo apellido</string>
+    <string name="nuevo_e_mail">Nuevo e-mail</string>
+    <string name="nuevo_nombre">Nuevo nombre</string>
+    <string name="icono_usuario">icono usuario</string>
+    <string name="nombrefp">Nombre:</string>
+    <string name="correofp">Correo:</string>
+    <string name="editar">Editar</string>
+    <string name="cerrar_sesion">cerrar sesión</string>
+    <string name="contenedor_ventana_detalles">contenedor ventana detalles</string>
+    <string name="icono_venue">icono venue</string>
+    <string name="cerrar_detalles">cerrar detalles</string>
+    <string name="name">Name</string>
+    <string name="icono_registro">icono registro</string>
 
 </resources>

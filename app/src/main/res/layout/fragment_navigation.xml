@@ -1,235 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_layout"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:foregroundTint="#5C1414">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/navigation__navigation_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:clickable="false"
+            android:focusable="true">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/navigation__navigation_layout"
+            <FrameLayout
+                android:id="@+id/navigation_map_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.github.chrisbanes.photoview.PhotoView
+                    android:id="@+id/navigation__map_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:animateLayoutChanges="true"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:scaleType="centerInside" />
 
-                    <FrameLayout
-                        android:id="@+id/navigation_map_container"
+                <FrameLayout
+                    android:id="@+id/navigation_map_container_icons"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/current_position"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:contentDescription="@string/ubicacion_actual"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/rutaCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginTop="25dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent">
+                        android:layout_height="wrap_content">
 
-                        <com.github.chrisbanes.photoview.PhotoView
-                            android:id="@+id/navigation__map_view"
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:contentDescription="@string/icono_caminante"
+                            android:src="@drawable/directions_walk_24px" />
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="20dp"
+                            android:contentDescription="@string/icono_flecha"
+                            android:src="@drawable/arrow_right_alt_24px" />
+
+                        <TextView
+                            android:id="@+id/destinoRuta"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="20dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/ruta_btn_close"
+                            style="@style/Theme.Mallnav.Button.Close"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="20dp" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:cardBackgroundColor="#eeeeee"
+                        app:cardCornerRadius="10dp"
+                        app:contentPadding="10dp">
+
+                        <TextView
+                            android:id="@+id/guiaRuta"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:scaleType="centerInside"/>
+                            android:gravity="center"
+                            android:text="" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <!-- Adjust button -->
+            <FrameLayout
+                android:id="@+id/navigation__adjust_mode_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/control_btn_margin_side"
+                android:layout_marginBottom="@dimen/navigation_margin_adjust_btn"
+                android:background="@drawable/bg_adjust_btn"
+                android:clickable="true"
+                android:contentDescription="@string/boton_de_navegacion"
+                android:elevation="@dimen/control_btn_elevation"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+            </FrameLayout>
+
+            <!-- Fingerprint button -->
+            <FrameLayout
+                android:id="@+id/wifi__fingerprinting_mode_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/control_btn_margin_side"
+                android:layout_marginBottom="@dimen/navigation_margin_adjust_btn"
+                android:background="@drawable/network_check_24px"
+                android:clickable="true"
+                android:contentDescription="@string/boton_de_fingerprinting"
+                android:elevation="@dimen/control_btn_elevation"
+                android:focusable="true"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/navigation__search_transparent_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:elevation="1dp"
+                android:gravity="top"
+                android:visibility="visible">
+
+
+                <LinearLayout
+                    android:id="@+id/navigation_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:animateLayoutChanges="true"
+                    android:background="@drawable/bg_rounded_bottom_transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="15dp"
+                    android:visibility="visible"
+                    tools:ignore="UselessParent">
+
+                    <!--Search box-->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/navigation__search_panel"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:animateLayoutChanges="true"
+                        android:paddingHorizontal="16dp">
+
+                        <androidx.appcompat.widget.SearchView
+                            android:id="@+id/navigation__search_field"
+                            style="@style/Theme.Mallnav.Search"
+                            android:layout_marginEnd="8dp"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
+                            app:closeIcon="@null"
+                            app:layout_constraintEnd_toStartOf="@id/navigation__search_btn_container"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <FrameLayout
-                            android:id="@+id/navigation_map_container_icons"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:id="@+id/navigation__search_btn_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="@id/navigation__search_field"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/navigation__search_field">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/navigation__search_btn_close"
+                                style="@style/Theme.Mallnav.Button.Close"
+                                android:layout_gravity="center"
+                                android:visibility="gone" />
 
                         </FrameLayout>
 
-                        <ImageView
-                            android:id="@+id/current_position"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:visibility="gone"/>
-                    </FrameLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/rutaCardView"
+                    <include
+                        android:id="@+id/navigation__venue_listview"
+                        layout="@layout/venue_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="4dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginHorizontal="18dp"
-                        android:visibility="gone">
+                        android:layout_marginTop="16dp"
+                        android:visibility="visible" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:padding="8dp">
+                </LinearLayout>
 
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+            </FrameLayout>
 
-                                <ImageView
-                                    android:layout_width="35dp"
-                                    android:layout_height="35dp"
-                                    android:src="@drawable/directions_walk_24px"/>
-                                <ImageView
-                                    android:layout_width="35dp"
-                                    android:layout_height="35dp"
-                                    android:layout_marginStart="20dp"
-                                    android:src="@drawable/arrow_right_alt_24px"/>
-                                <TextView
-                                    android:id="@+id/destinoRuta"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginStart="20dp"
-                                    android:layout_weight="1"
-                                    android:gravity="center"
-                                    android:text="Nina"/>
-
-                                <com.google.android.material.button.MaterialButton
-                                    android:id="@+id/ruta_btn_close"
-                                    style="@style/Theme.Mallnav.Button.Close"
-                                    android:layout_width="28dp"
-                                    android:layout_height="28dp"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="20dp"/>
-
-                            </LinearLayout>
-
-                            <com.google.android.material.card.MaterialCardView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:contentPadding="10dp"
-                                app:cardCornerRadius="10dp"
-                                app:cardBackgroundColor="#eeeeee"
-                                android:layout_marginTop="8dp">
-
-                                <TextView
-                                    android:id="@+id/guiaRuta"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:gravity="center"
-                                    android:text="Nina"/>
-
-                            </com.google.android.material.card.MaterialCardView>
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-
-                    <!-- Adjust button -->
-                    <FrameLayout
-                        android:id="@+id/navigation__adjust_mode_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/control_btn_margin_side"
-                        android:layout_marginBottom="@dimen/navigation_margin_adjust_btn"
-                        android:background="@drawable/bg_adjust_btn"
-                        android:clickable="true"
-                        android:elevation="@dimen/control_btn_elevation"
-                        android:focusable="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:contentDescription="boton de navegacion">
-                    </FrameLayout>
-
-                    <!-- Fingerprint button -->
-                    <FrameLayout
-                        android:id="@+id/wifi__fingerprinting_mode_button"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="@dimen/control_btn_margin_side"
-                        android:layout_marginBottom="@dimen/navigation_margin_adjust_btn"
-                        android:background="@drawable/network_check_24px"
-                        android:clickable="true"
-                        android:visibility="gone"
-                        android:elevation="@dimen/control_btn_elevation"
-                        android:focusable="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:contentDescription="boton de fingerprinting">
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:id="@+id/navigation__search_transparent_bg"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:elevation="1dp"
-                        android:gravity="top"
-                        android:visibility="visible">
-
-
-                        <LinearLayout
-                            android:id="@+id/navigation_search"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:animateLayoutChanges="true"
-                            android:background="@drawable/bg_rounded_bottom_transparent"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:orientation="vertical"
-                            android:paddingTop="25dp"
-                            android:paddingBottom="15dp"
-                            android:visibility="visible">
-
-                            <!--Search box-->
-                            <androidx.constraintlayout.widget.ConstraintLayout
-                                android:id="@+id/navigation__search_panel"
-                                android:layout_width="match_parent"
-                                android:layout_height="37dp"
-                                android:animateLayoutChanges="true"
-                                android:paddingHorizontal="16dp">
-
-                                <androidx.appcompat.widget.SearchView
-                                    android:id="@+id/navigation__search_field"
-                                    style="@style/Theme.Mallnav.Search"
-                                    android:layout_marginEnd="8dp"
-                                    android:paddingStart="12dp"
-                                    app:closeIcon="@null"
-                                    app:layout_constraintEnd_toStartOf="@id/navigation__search_btn_container"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <FrameLayout
-                                    android:id="@+id/navigation__search_btn_container"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:layout_constraintBottom_toBottomOf="@id/navigation__search_field"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/navigation__search_field">
-
-                                    <com.google.android.material.button.MaterialButton
-                                        android:id="@+id/navigation__search_btn_close"
-                                        style="@style/Theme.Mallnav.Button.Close"
-                                        android:layout_gravity="center"
-                                        android:visibility="gone" />
-
-                                </FrameLayout>
-
-                            </androidx.constraintlayout.widget.ConstraintLayout>
-
-                            <include
-                                android:id="@+id/navigation__venue_listview"
-                                layout="@layout/venue_list"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
-                                android:visibility="visible" />
-
-                        </LinearLayout>
-
-
-                    </FrameLayout>
-
-                        <include
-                            android:id="@+id/navigation__warning"
-                            layout="@layout/warning"
-                            android:visibility="gone"/>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                android:id="@+id/navigation__warning"
+                layout="@layout/warning"
+                android:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

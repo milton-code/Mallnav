@@ -17,6 +17,7 @@
             android:id="@+id/imageRegistro"
             android:layout_width="match_parent"
             android:layout_height="90dp"
+            android:contentDescription="@string/icono_registro"
             android:src="@drawable/registro"
             app:tint="#656565"/>
 
@@ -31,9 +32,11 @@
                 android:layout_height="48dp"
                 android:layout_marginEnd="7.5dp"
                 android:layout_weight="1"
+                android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/nombre"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColorHint="#757575" />
 
             <EditText
                 android:id="@+id/edtTxtApellido"
@@ -41,9 +44,11 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="7.5dp"
                 android:layout_weight="1"
+                android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/apellido"
-                android:inputType="text" />
+                android:inputType="text"
+                android:textColorHint="#757575" />
         </LinearLayout>
 
         <EditText
@@ -51,18 +56,22 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/ingrese_su_e_mail"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:textColorHint="#757575" />
 
         <EditText
             android:id="@+id/edtTxtPassword"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="10dp"
+            android:autofillHints=""
             android:ems="10"
             android:hint="@string/ingrese_un_password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textColorHint="#757575" />
 
         <Button
             android:id="@+id/btnReg"

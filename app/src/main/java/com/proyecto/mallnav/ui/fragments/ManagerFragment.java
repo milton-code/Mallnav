@@ -184,7 +184,7 @@ public class ManagerFragment extends Fragment {
 
     private void setViewsParams(){
         mNavigationLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
-        mapView.setImageResource(R.drawable.mapa_mall);
+        mapView.setImageResource(R.drawable.mapa_mall_dark);
         mapView.setMaximumScale(10.0f);
         mapView.setMinimumScale(1.0f);
         mSearchLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
@@ -192,6 +192,7 @@ public class ManagerFragment extends Fragment {
         mItemDivider.setDividerColor(ContextCompat.getColor(requireActivity(), R.color.colorBackground));
         mItemDivider.setLastItemDecorated(false);
         mVenueListView.addItemDecoration(mItemDivider);
+        mVenueBottomSheet.setRouteButtonVisibility(GONE);
     }
 
 

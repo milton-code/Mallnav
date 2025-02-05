@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.proyecto.mallnav.R;
 
 import java.util.HashMap;
@@ -32,6 +34,8 @@ public class EditDialog extends DialogFragment {
 
     EditText mNuevoNombre, mNuevoApellido, mNuevoCorreo;
     Button mUpdate;
+    static FirebasePerformance performance = FirebasePerformance.getInstance();
+    static Trace editTrace = performance.newTrace("actualizar_usuario");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class EditDialog extends DialogFragment {
         mUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editTrace.start();
                 String nuevoNombre = mNuevoNombre.getText().toString().trim();
                 String nuevoApellido = mNuevoApellido.getText().toString().trim();
                 String nuevoCorreo = mNuevoCorreo.getText().toString().trim();
@@ -65,11 +70,14 @@ public class EditDialog extends DialogFragment {
                 ProfileFragment.docRef.update(nuevosDatos).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        editTrace.stop();
                         Toast.makeText(getContext(),"Datos actualizados correctamente",Toast.LENGTH_SHORT).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        editTrace.incrementMetric("actualizar_usuario_errors", 1);
+                        editTrace.stop();
                         Toast.makeText(getContext(),"Error al actualizar datos"+e.getMessage(),Toast.LENGTH_SHORT).show();
                     }
                 });

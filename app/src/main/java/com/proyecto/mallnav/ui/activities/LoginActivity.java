@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private int version = Build.VERSION.SDK_INT;
     private FirebaseFirestore mfirestore;
     FirebasePerformance performance = FirebasePerformance.getInstance();
-    Trace loginTrace = performance.newTrace("login_trace");
+    Trace loginTrace = performance.newTrace("iniciar_sesión");
     EditText mCorreo, mPassword;
     Button mLogin;
     private FirebaseAuth mAuth;
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                loginTrace.incrementMetric("error_count", 1);
+                loginTrace.incrementMetric("iniciar_sesión_errors", 1);
                 loginTrace.stop();
                 Toast.makeText(LoginActivity.this,"Credenciales incorrectas",Toast.LENGTH_SHORT).show();
             }

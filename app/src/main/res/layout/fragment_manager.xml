@@ -66,7 +66,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/navigation__search_panel"
                         android:layout_width="match_parent"
-                        android:layout_height="37dp"
+                        android:layout_height="50dp"
                         android:animateLayoutChanges="true"
                         android:paddingHorizontal="16dp">
 
@@ -74,7 +74,8 @@
                             android:id="@+id/navigation__search_field"
                             style="@style/Theme.Mallnav.Search"
                             android:layout_marginEnd="8dp"
-                            android:paddingStart="12dp"
+                            android:paddingStart="0dp"
+                            android:paddingEnd="0dp"
                             app:closeIcon="@null"
                             app:layout_constraintEnd_toStartOf="@id/navigation__search_btn_container"
                             app:layout_constraintStart_toStartOf="parent"

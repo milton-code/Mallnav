@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--primary-->
-    <color name="colorPrimary">#32B8CF</color>
+    <color name="colorPrimary">#1B6B78</color>
     <color name="colorPrimary_70">#B332B8CF</color>
     <color name="colorPrimary_50">#8032B8CF</color>
     <color name="colorPrimaryLight">#8BC7D1</color>
@@ -19,6 +19,7 @@
     <color name="colorTextPrimary">#1F1F1F</color>
     <color name="colorTextSecondary">#FFFFFF</color>
     <color name="colorTextSecondaryGray">#79858A</color>
+    <color name="colorTextDarkGray">#666666</color>
     <!--    Condition-->
     <color name="colorSuccess">#4CD964</color>
     <color name="colorSuccessBackground">#404CD964</color>

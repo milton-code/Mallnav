@@ -17,7 +17,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -27,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -235,7 +239,7 @@ public class NavigationFragment extends BaseFragment {
 
     private void setViewsParams(){
         mNavigationLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
-        mapView.setImageResource(R.drawable.mapa_mall);
+        mapView.setImageResource(R.drawable.mapa_mall_dark);
         mapView.setMaximumScale(10.0f);
         mapView.setMinimumScale(1.0f);
         mSearchLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
@@ -245,6 +249,16 @@ public class NavigationFragment extends BaseFragment {
         mVenueListView.addItemDecoration(mItemDivider);
         currPos.setImageResource(R.drawable.ic_current_point);
         currPos.setZ(1f);
+        EditText searchEditText = mSearchField.findViewById(androidx.appcompat.R.id.search_src_text);
+        ViewGroup.LayoutParams params = searchEditText.getLayoutParams();
+        params.height = 250; // Ajusta la altura en píxeles
+        searchEditText.setLayoutParams(params);
+        searchEditText.setTextSize(19);
+        searchEditText.setPadding(10, 20, 10, 20);
+        searchEditText.setHintTextColor(ContextCompat.getColor(getContext(), R.color.colorTextDarkGray));
+        mVenueBottomSheet.setAgregarVenueButtonVisibility(GONE);
+        mVenueBottomSheet.setActualizarVenueButtonVisibility(GONE);
+        mVenueBottomSheet.setEliminarVenueButtonVisibility(GONE);
     }
 
 
@@ -556,12 +570,17 @@ public class NavigationFragment extends BaseFragment {
         }
 
         venueIcon = new ImageView(requireContext());
+        /*int icono = venue.getVenueIcon().getImageDrawable();
+        Drawable drawable = AppCompatResources.getDrawable(getContext(), icono);
+        VectorDrawable vectorDrawable = (VectorDrawable) drawable;*/
+
         venueIcon.setImageResource(venue.getVenueIcon().getImageDrawable());
         int ogPointX = venue.getSector().getPointX() + 4;
         int ogPointY = venue.getSector().getPointY() + 4;
 
         venueIcon.setTag(R.id.venueIconWidth,ogPointX);
         venueIcon.setTag(R.id.venueIconHeight,ogPointY);
+        venueIcon.setContentDescription(venue.getNombre());
         venueIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

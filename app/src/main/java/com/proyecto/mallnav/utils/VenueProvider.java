@@ -24,7 +24,7 @@ public class VenueProvider {
     @SuppressLint("StaticFieldLeak")
     private static final FirebaseFirestore mfirestore = FirebaseFirestore.getInstance();
     static FirebasePerformance performance = FirebasePerformance.getInstance();
-    static Trace trace = performance.newTrace("firestore_query_trace");
+    static Trace venueTrace = performance.newTrace("cargar_venues");
     public static List<Venue> venueList = new ArrayList<>();
     public static List<Categoria> categoriaList = new ArrayList<>();
     public static List<VenueIconObj> icons = VenueIconsListProvider.VenueIconsList;
@@ -32,7 +32,7 @@ public class VenueProvider {
 
 
     public static void initVenues(OnVenuesLoadedCallback callback) {
-        trace.start();
+        venueTrace.start();
         venueList.clear();
         CollectionReference venuesCollection = mfirestore.collection("venues");
         CollectionReference categoriasCollection = mfirestore.collection("categorias");
@@ -45,7 +45,7 @@ public class VenueProvider {
         Tasks.whenAllComplete(venuesTask, categoriasTask, sectorVenueTask)
                 .addOnCompleteListener(task -> {
                     if (venuesTask.isSuccessful() && categoriasTask.isSuccessful() && sectorVenueTask.isSuccessful()) {
-                        trace.stop();
+                        venueTrace.stop();
                         // Procesar los datos de venues
                         for (QueryDocumentSnapshot documentVenue : venuesTask.getResult()) {
                             Venue venue = documentVenue.toObject(Venue.class);
@@ -100,12 +100,11 @@ public class VenueProvider {
                         // Llamar al callback después de cargar todos los datos
                         callback.onVenuesLoaded(venueList);
                     } else {
-                        trace.incrementMetric("error_count", 1);
-                        trace.stop();
+                        venueTrace.incrementMetric("cargar_venues_errors", 1);
+                        venueTrace.stop();
                         Log.e("VenueProvider", "Error al cargar algunos datos de Firestore");
                     }
                 });
-
     }
 
     public interface OnVenuesLoadedCallback {

@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.perf.FirebasePerformance;
+import com.google.firebase.perf.metrics.Trace;
 import com.proyecto.mallnav.R;
 
 import java.util.HashMap;
@@ -31,6 +33,8 @@ public class RegistroFragment extends DialogFragment {
     Button btnRegistrar;
     private FirebaseFirestore mfirestore;
     private FirebaseAuth mAuth;
+    static FirebasePerformance performanceReg = FirebasePerformance.getInstance();
+    static Trace regTrace = performanceReg.newTrace("registrar_usuario");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,7 @@ public class RegistroFragment extends DialogFragment {
     }
 
     public void registrarUser(String nombreReg, String apellidoReg, String e_mailReg, String passwordReg){
+        regTrace.start();
         mAuth.createUserWithEmailAndPassword(e_mailReg,passwordReg).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -85,6 +90,7 @@ public class RegistroFragment extends DialogFragment {
                 mfirestore.collection("user").document(id).set(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        regTrace.stop();
                         Toast.makeText(getContext(),"Usuario registrado exitosamente", Toast.LENGTH_SHORT).show();
                         getDialog().dismiss();
                     }
@@ -98,6 +104,8 @@ public class RegistroFragment extends DialogFragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                regTrace.incrementMetric("registrar_usuario_errors", 1);
+                regTrace.stop();
                 Toast.makeText(getContext(),"Error al registrar usuario", Toast.LENGTH_SHORT).show();
             }
         });
