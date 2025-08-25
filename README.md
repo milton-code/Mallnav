@@ -21,5 +21,6 @@ Android app of an indoor positioning system which uses Wi-Fi signals to locate t
 ## Screenshots
 
 ![App Screenshot](https://github.com/milton-code/Mallnav/blob/faee96611a3cd6841b33aef64994464c9ddcb904/resized.jpeg)
+![App Screenshot](https://github.com/milton-code/Mallnav/blob/2a2aba4d7b810fefdc6971fa6a779e48f263549b/resized2.jpeg)
 
 
